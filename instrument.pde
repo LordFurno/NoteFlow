@@ -50,7 +50,7 @@ class Instrument{
     
   }
   
-  void playNote(int midiNote){
+  void playNote(int midiNote, float duration){
     PitchData info = getPitchRate(midiNote);
     
     SoundFile baseNote = new SoundFile(this.app, this.filePaths[info.index]);
