@@ -48,27 +48,26 @@ class Measure{
   
   //Resolve when midi pitch using key sig + any within-measure accidentals
   //Within-measure accidentals take prio over key signature, this is normal music
-  int resolvePitch(int midiNote, KeySignature keySig) {
+  int resolvePitch(int midiNote, KeySignature keySig){
     int pitchClass = midiNote%12;
     
-    if (withinMeasureAccidentals.containsKey(pitchClass)) {
+    if (withinMeasureAccidentals.containsKey(pitchClass)){
       return midiNote + withinMeasureAccidentals.get(pitchClass);
     }
     return keySig.modifyPitch(midiNote);
   }
 }
 
-class MusicalPiece{
-  String title;
-  ArrayList<Instrument> instruments;
-  ArrayList<ArrayList<Measure>> tracks; //tracks.get(i) = all measures for instrument i
-  KeySignature keySig;
-  TimeSignature timeSig;
-  int tempo; //BPM
+//class MusicalPiece{
+//  String title;
+//  ArrayList<Instrument> instruments;
+//  ArrayList<ArrayList<Measure>> tracks; //tracks.get(i) = all measures for instrument i
+//  KeySignature keySig;
+//  TimeSignature timeSig;
+//  int tempo; //BPM
   
   
-  
-}
+//}
 
 
 class Note extends MusicEvent{

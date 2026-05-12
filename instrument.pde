@@ -1,4 +1,3 @@
-import java.nio.file.Files;
 
 class PitchData{ //Have to do this bceause I want to return multiple values and java is annoying
   float rate;
@@ -21,6 +20,8 @@ class Instrument{
     this.app = p;
     this.samplePitches = new int[pitches.length];
     this.filePaths = new String[files.length];
+    this.samples = new SoundFile[files.length];
+    
     for (int i=0;i<pitches.length;i++){
       this.samplePitches[i] = pitches[i];
       this.filePaths[i] = files[i];
