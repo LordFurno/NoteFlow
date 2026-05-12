@@ -21,7 +21,7 @@ void drawArt() {
   float extendingLinesMax = sphereRadius * 4.0;
 
   for (int angle = 0; angle <= 360; angle += 3) {
-    //High noise scale --> neighbor lines don't match as much, looks jumpy and independent
+    //High noise scale --> neighbor lines don't match as much(but still related as a result of noise()), looks jumpy and independent
     float pulse = noise(angle * 0.3, frameCount * 0.02);
     
     //Squish the pulse to exaggerate short vs long — makes it more dramatic
