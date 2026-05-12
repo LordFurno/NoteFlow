@@ -26,6 +26,7 @@ void drawScreen(){
 //HOMEPAGE
 void drawHome(){
   background(0);
+  drawArt();
   textSize(100);
   fill(255);
   textAlign(LEFT);
