@@ -10,7 +10,7 @@ void drawArt() {
   unit = height/100.0;
   strokeWeight(unit/10.0);
   center = new PVector(width/2,height/2);
-  sphereRadius = 15 * round(unit);
+  sphereRadius = 17 * round(unit);
   fill(0);
   
   noStroke();
