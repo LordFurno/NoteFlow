@@ -7,21 +7,66 @@ class MusicEvent{
 }
 
 class Measure{
-  int numBeats, maxBeats; //REPLACE THIS WITH TimeSignature class in the future
+  int track, id, bpm;
+  TimeSignature timeSig;
   ArrayList<MusicEvent> events; //Everyihtng that happens in this measure (notes, rests, e.t.c)
-  int track, id; //Track tells us which track it is (basically what isntrument and what number instrument)
-  int bpm;
-  Measure(int n, int m, int i, int b){ //i is the index of the msaure within the MusicalPiece class
-    this.numBeats = n;
-    this.maxBeats = m;
-    this.bpm = b;
-    
+  HashMap<Integer, Integer> withinMeasureAccidentals = new HashMap<Integer, Integer>();
+  
+  Measure(int track, int id, TimeSignature timeSig){ //i is the index of the msaure within the MusicalPiece class
+    this.track = track;
+    this.id = id;
+    this.timeSig = timeSig;
+    this.events = new ArrayList<MusicEvent>();
+    this.withinMeasureAccidentals = new HashMap<Integer, Integer>();
+  }
+  float beatUsed(){
+    float total = 0;
+    for (MusicEvent e: events){
+      total += e.duration;
+    }
+    return total;
+  }
+  float beatsRemaining(){
+    return timeSig.measureDuration() - beatsUsed();
   }
   
-  float beatToMillis(float beats){
-    //Beats is the value of the note (quarter, eight,e.t.c)
-    return beats*(60.0/this.bpm)*1000.0;
+  boolean isFull(){
+    return beatsRemaining() < 0.001; //Not exacyl 0 because processing is weird
   }
+  boolean canAdd(MusicEvent e){
+    return beatsRemaining() >= e.duration - 0.001;
+  }
+  
+  //Call this manually when a user places an accidental on a note in this measure
+  void applyAccidental(int pitchClass, int modifier){
+    withinMeasureAccidentals.put(pitchClass, modifier); //Future notes have same accidental
+  }
+  
+  void clearAccidentals(){
+    withinMeasureAccidentals.clear(); 
+  }
+  
+  //Resolve when midi pitch using key sig + any within-measure accidentals
+  //Within-measure accidentals take prio over key signature, this is normal music
+  int resolvePitch(int midiNote, KeySignature keySig) {
+    int pitchClass = midiNote%12;
+    
+    if (withinMeasureAccidentals.containsKey(pitchClass)) {
+      return midiNote + withinMeasureAccidentals.get(pitchClass);
+    }
+    return keySig.modifyPitch(midiNote);
+  }
+}
+
+class MusicalPiece{
+  String title;
+  ArrayList<Instrument> instruments;
+  ArrayList<ArrayList<Measure>> tracks; //tracks.get(i) = all measures for instrument i
+  KeySignature keySig;
+  TimeSignature timeSig;
+  int tempo; //BPM
+  
+  
   
 }
 
