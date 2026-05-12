@@ -13,18 +13,19 @@ class PitchData{ //Have to do this bceause I want to return multiple values and 
 class Instrument{
   String name;
   int[] samplePitches;
+  SoundFile[] samples;//Preloaded
   String[] filePaths;
   PApplet app;
   Instrument(String n, int[] pitches, String[] files, PApplet p){
     this.name = n;
     
-    
+    this.app = p;
     this.samplePitches = new int[pitches.length];
     this.filePaths = new String[files.length];
     for (int i=0;i<pitches.length;i++){
       this.samplePitches[i] = pitches[i];
       this.filePaths[i] = files[i];
-      this.app = p;
+      this.samples[i] = new SoundFile(this.app, files[i]);
     }
     
   }
@@ -52,12 +53,15 @@ class Instrument{
   
   void playNote(int midiNote, float duration){
     PitchData info = getPitchRate(midiNote);
+    this.samples[info.index].stop();
+    this.samples[info.index].rate(info.rate);
+    this.samples[info.index].play();
     
-    SoundFile baseNote = new SoundFile(this.app, this.filePaths[info.index]);
-    baseNote.stop();
-    baseNote.rate(info.rate);
-
-    baseNote.play();
-    
+  }
+  
+  void stopAll(){
+    for (SoundFile s: this.samples){
+      s.stop();
+    }
   }
 }
