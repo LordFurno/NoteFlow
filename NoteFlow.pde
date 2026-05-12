@@ -25,5 +25,4 @@ void setup() {
 
 void draw() {
   drawScreen();
-  // TODO: Saanika draws the screen here
 }
