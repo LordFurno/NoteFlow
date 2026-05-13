@@ -1,33 +1,35 @@
 class Demo{
+  
   //Fields
   String demoName;
   TimeSignature timeSig;
   KeySignature keySig;
   Instrument instrumentType;
   
-  ArrayList<MusicEvent> demoEvent;
+  ArrayList <MusicEvent> demoEvents;
   
   float xPoint, yPoint;
   float space;
   
-  //constructor
+  //Constructor
   Demo(String numDem, TimeSignature t, KeySignature k, Instrument i ){
     
     this.demoName = numDem;
 
     this.timeSig = t;
     this.keySig = k;
-    this.instrument = i;
+    this.instrumentType = i;
 
     demoEvents = new ArrayList<MusicEvent>();
 
-    startX = 70;
-    startY = 140;
-    spacing = 70;
+    xPoint = 70;
+    yPoint = 140;
+    space = 70;
   }
   
   void addNote(float duration, int midiPitch){
-    Note n = new Note(duration, midiPitch, instrument);
+    
+    Note n = new Note(duration, midiPitch, instrumentType);
     demoEvents.add(n);
   }
   
@@ -38,14 +40,16 @@ class Demo{
   }
   
   void playDemo(){
+    
     for(MusicEvent e : demoEvents){
+      
       if(e instanceof Note){
+        
         Note n = (Note)e;
         n.play();
         
         delay(int((60000.0 / bpm) * n.duration));
       }
-      
       else{
         
         delay(int((60000.0 / bpm) * e.duration));
@@ -68,18 +72,14 @@ class Demo{
       }
     }
     
-    println("Demo Name" + demoName);
-    println("Instruments:" + instrument.name);
-    println("Time Signature:" + timeSig.toString());
-    println("Key Signature:" + keySig.getKeyName());
-    println("Notes:" + noteCount);
-    println("Rests:" + restCount);
-    
+    println("Demo Name: " + demoName);
+    println("Instrument: " + instrumentType.name);
+    println("Time Signature: " + timeSig.toString());
+    println("Key Signature: " + keySig.getKeyName());
+    println("Notes: " + noteCount);
+    println("Rests: " + restCount);
   }
-  
-  void drawDemo(float x, float y){
-  }
-  
+}
   //this is just the foundation/structure for the demos
   /*
   //fields
@@ -112,4 +112,3 @@ class Demo{
   
   //method to analyze what each of the demo's has, and calling that information
   */
-}
