@@ -1,75 +1,85 @@
-//note/music-click_Radius = 50;
-
-
-//finish the full draw, delete, move, and place methods
-//add comments
 class EditManager {
 
-  //fields
   ArrayList<String> undoList;
   ArrayList<String> redoList;
-  
+
   boolean drag;
+
   String DraggedItem;
-  
+
   float dragX;
   float dragY;
-  
+
   float snapSpace;
   float snapX;
   float snapY;
-  
+
   float trashX;
   float trashY;
   float trashW;
   float trashH;
 
+  ArrayList<String> placedNames;
+  ArrayList<Float> placedX;
+  ArrayList<Float> placedY;
 
-  //constructor
   EditManager() {
 
     undoList = new ArrayList<String>();
     redoList = new ArrayList<String>();
-    
+
     drag = false;
+
     DraggedItem = "";
-    
+
+    dragX = 0;
+    dragY = 0;
+
     snapSpace = 30;
+
     snapX = 200;
     snapY = 200;
-    
+
     trashX = 500;
     trashY = 600;
     trashW = 100;
     trashH = 50;
-    
+
+    placedNames = new ArrayList<String>();
+    placedX = new ArrayList<Float>();
+    placedY = new ArrayList<Float>();
   }
-  
-  void ActionAdd(String action){
+
+
+  void ActionAdd(String action) {
+
     undoList.add(action);
+
     redoList.clear();
-    //whenever an action occurs, it will appear in the textfile (like '8th note added')
   }
-  
-  
-  String undo(){
-   if(undoList.size() > 0){
-     String action = undoList.get(undoList.size() - 1);
-     undoList.remove(undoList.size() - 1);
-     
-     redoList.add(action);
-     return action;
-   }
-   
-   return "";
+
+
+  String undo() {
+
+    if (undoList.size() > 0) {
+
+      String action = undoList.get(undoList.size() - 1);
+
+      undoList.remove(undoList.size() - 1);
+
+      redoList.add(action);
+
+      return action;
+    }
+    return "";
   }
-  
+
+
   String redo() {
 
     if (redoList.size() > 0) {
 
-      String action =
-        redoList.get(redoList.size() - 1);
+      String action = redoList.get(redoList.size() - 1);
 
       redoList.remove(redoList.size() - 1);
 
@@ -77,116 +87,137 @@ class EditManager {
 
       return action;
     }
-
     return "";
   }
-  
-  void HistorySave(){
+
+
+  void HistorySave() {
+
     String[] history = new String[undoList.size()];
-    
-    for(int i = 0; i < undoList.size(); i++){
+
+    for (int i = 0; i < undoList.size(); i++) {
       history[i] = undoList.get(i);
     }
     saveStrings("history.txt", history);
   }
-  
-  void MoveAction(String itemName){
+
+
+  void MoveAction(String itemName) {
     drag = true;
     DraggedItem = itemName;
     dragX = mouseX;
     dragY = mouseY;
-    
   }
-  
-  void dragUpdate(){
-    if(drag){
+
+
+  void dragUpdate() {
+
+    if (drag) {
       dragX = mouseX;
       dragY = mouseY;
     }
   }
-  
-  
-  
-//  void placeAction(){
-//    drag = false;
-//    for(int i = 0; i < notesize; i++){
-//      float d = dist(this.pos.x, this.pos.y, notesize[i].pos.x, notesize[i].pos.y); 
-//      //works similar to sight radius for it to snap into place
-      
-//      if(d < this.mouseX /*when dragged*/ && notesize){
-//        x = blah;
-//        y = blah;
-//        while there are items/notes on the line;
-//        spacing  = 50;
-//        x += 40;
-//        if you need to move to a new line
-//        y += 100;
-//      }
-      
-//      else{
-//        the note just disappears from the users mouse, and kinda 'reappears' 
-//        back in the legend
-//      }
-//    }
-    
-    
-//  //set mousedragged equal to false, 
-//  //it will check if its in the vicinity of the area
-//  //if it is, it will click into place (probably using for/while loop for spacing)
-//  //if its not in vicinity, then it just goes back to the legend/loading area
-//}
-  
-//  void deleteAction(){
-//    if note is clicked (mouse click is within vicinity of the note){
-      
-//      trash outline/stroke is gonna be bright yellow
-//      if you click on the trashcan (within vicinity)
-//      the note disappears
-//    }
-//  }
-  
-////  user will just click the note or item (if mouseclicked on item is true), 
-////  and there will be a garbage can icon that glows (either use transparency fill, or turn outline yellow)
-////  you can click the garbage can, and if you do, it just deletes it
 
+
+  void placeAction() {
+
+    if (!drag) {
+      return;
+    }
+
+    float snappedX = round((dragX - snapX) / snapSpace) * snapSpace + snapX;
+
+    float snappedY = round((dragY - snapY) / snapSpace) * snapSpace + snapY;
+
+    if (dragX > snapX && dragX < width - 150 && dragY > snapY && dragY < height - 120) {
+
+      placedNames.add(DraggedItem);
+      placedX.add(snappedX);
+      placedY.add(snappedY);
+
+      ActionAdd(DraggedItem + " placed");
+    }
+
+    drag = false;
+    DraggedItem = "";
+  }
+
+
+  void deleteAction() {
+
+    for (int i = placedNames.size() - 1; i >= 0; i--) {
+
+      float x = placedX.get(i);
+      float y = placedY.get(i);
+
+      if (x > trashX && x < trashX + trashW && y > trashY && y < trashY + trashH) {
+
+        ActionAdd(placedNames.get(i) + " deleted");
+
+        placedNames.remove(i);
+        placedX.remove(i);
+        placedY.remove(i);
+      }
+    }
+  }
+
+
+  void drawPlacedItems() {
+
+    fill(255);
+
+    for (int i = 0; i < placedNames.size(); i++) {
+
+      float x = placedX.get(i);
+      float y = placedY.get(i);
+
+      ellipse(x, y, 20, 15);
+      line(x + 8, y, x + 8, y - 35);
+    }
+  }
+
+
+  void drawDraggedItem() {
+
+    if (drag) {
+      
+      fill(255);
+      ellipse(dragX, dragY, 20, 15);
+      line(dragX + 8, dragY, dragX + 8, dragY - 35);
+    }
+  }
+
+
+  void drawTrash() {
+
+    if (drag) {
+      stroke(255, 255, 0);
+      strokeWeight(4);
+    } 
+    else {
+      stroke(255);
+      strokeWeight(2);
+    }
+
+    fill(40);
+    rect(trashX, trashY, trashW, trashH, 10);
+
+    rect(trashX - 10, trashY - 12, trashW + 20, 12, 5);
+    fill(255);
+
+    textAlign(CENTER, CENTER);
+    textSize(22);
+    text("TRASH", trashX + trashW/2, trashY + trashH/2);
+  }
+
+
+  void display() {
+    drawPlacedItems();
+    drawDraggedItem();
+    drawTrash();
+  }
   
-//  void drawTrash(){
-//    //just gonna draw a trash can with the stroke as a variable
-//  }
   
-//  void drawMusic(){
-//    //ill check if any methods similar to this exist, 
-//    //if not, I can find transparent PNG's or just quickly make them
-//  }
   
 }
-
-
-
-
-
-
-/*REMAINING
--placing/snap into place
--deleting
--draw/display the trashcan and the item dragged
-
-*/
-
-
-//should also store all the actions into a textfile so that it can be reached for undo/redo
-
-/*when moving/dragging the notes and stuff, it will work as a drag and drop sorta, 
-like if its near the line things or area and mouse dragged equals false, it clicks into place
-when its dragged away from the legend, the item is still there, but youre dragging too
-essentially its unlimited
-
-void moveAction(){
-  if mouseclicked on item is true, then mousedragged on it is also true
-}
-
-
-//have an undo and redo stack to track the users actions
-
-
-*/
+  
