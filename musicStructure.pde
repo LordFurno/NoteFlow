@@ -188,11 +188,13 @@ class MusicalPiece{
     return tracks.get(trackID).get(measureID);
   }
   
+  //This is only called as a helper function
   void addMeasure(int trackID, int i){ //i is the index within the track itself
      //Adds a measure to trackID track
      this.tracks.get(trackID).add(new Measure(trackID,i,this.timeSig));
   }
   
+  //This is the one that should be user-facing
   void addMeasure(){ //Add measures for every track
     for (int t=0;t<tracks.size();t++){
       addMeasure(t, tracks.get(t).size());
@@ -210,6 +212,9 @@ class MusicalPiece{
     }
   }
   
+  //trackID is the index of which track in the piece
+  //measureID is the index of the measure within a specific track
+  //eventID is the specific note within the measure that is being placed/edited
   boolean placeEvent(int trackID, int measureID, int eventID, MusicEvent event){
     Measure measure = getMeasure(trackID, measureID);
     MusicEvent oldEvent = measure.events.get(eventID);
