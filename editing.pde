@@ -1,3 +1,8 @@
+//note/music-click_Radius = 50;
+
+
+//finish the full draw, delete, move, and place methods
+//add comments
 class EditManager {
 
   //fields
@@ -43,7 +48,9 @@ class EditManager {
   void ActionAdd(String action){
     undoList.add(action);
     redoList.clear();
+    //whenever an action occurs, it will appear in the textfile (like '8th note added')
   }
+  
   
   String undo(){
    if(undoList.size() > 0){
@@ -98,7 +105,67 @@ class EditManager {
     }
   }
   
+  
+  
+//  void placeAction(){
+//    drag = false;
+//    for(int i = 0; i < notesize; i++){
+//      float d = dist(this.pos.x, this.pos.y, notesize[i].pos.x, notesize[i].pos.y); 
+//      //works similar to sight radius for it to snap into place
+      
+//      if(d < this.mouseX /*when dragged*/ && notesize){
+//        x = blah;
+//        y = blah;
+//        while there are items/notes on the line;
+//        spacing  = 50;
+//        x += 40;
+//        if you need to move to a new line
+//        y += 100;
+//      }
+      
+//      else{
+//        the note just disappears from the users mouse, and kinda 'reappears' 
+//        back in the legend
+//      }
+//    }
+    
+    
+//  //set mousedragged equal to false, 
+//  //it will check if its in the vicinity of the area
+//  //if it is, it will click into place (probably using for/while loop for spacing)
+//  //if its not in vicinity, then it just goes back to the legend/loading area
+//}
+  
+//  void deleteAction(){
+//    if note is clicked (mouse click is within vicinity of the note){
+      
+//      trash outline/stroke is gonna be bright yellow
+//      if you click on the trashcan (within vicinity)
+//      the note disappears
+//    }
+//  }
+  
+////  user will just click the note or item (if mouseclicked on item is true), 
+////  and there will be a garbage can icon that glows (either use transparency fill, or turn outline yellow)
+////  you can click the garbage can, and if you do, it just deletes it
+
+  
+//  void drawTrash(){
+//    //just gonna draw a trash can with the stroke as a variable
+//  }
+  
+//  void drawMusic(){
+//    //ill check if any methods similar to this exist, 
+//    //if not, I can find transparent PNG's or just quickly make them
+//  }
+  
 }
+
+
+
+
+
+
 /*REMAINING
 -placing/snap into place
 -deleting
@@ -118,17 +185,8 @@ void moveAction(){
   if mouseclicked on item is true, then mousedragged on it is also true
 }
 
-void placeAction(){
-  set mousedragged equal to false, 
-  it will check if its in the vicinity of the area
-  if it is, it will click into place (probably using for/while loop for spacing)
-  if its not in vicinity, then it just goes back to the legend/loading area
-}
 
-void deleteAction(){
-  user will just click the note or item (if mouseclicked on item is true), 
-  and there will be a garbage can icon that glows (either use transparency fill, or turn outline yellow)
-  you can click the garbage can, and if you do, it just deletes it
-}
+//have an undo and redo stack to track the users actions
+
 
 */
