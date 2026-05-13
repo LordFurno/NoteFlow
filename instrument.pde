@@ -13,18 +13,26 @@ class Instrument{
   int[] samplePitches;
   SoundFile[] samples;//Preloaded
   String[] filePaths;
+  float[] sampleStarts; //Where each sample starts actually playing
   PApplet app;
+  
   Instrument(String n, int[] pitches, String[] files, PApplet p){
+    this(n, pitches, files, new float[files.length], p);
+  }
+  
+  Instrument(String n, int[] pitches, String[] files, float[] starts, PApplet p){
     this.name = n;
     
     this.app = p;
     this.samplePitches = new int[pitches.length];
     this.filePaths = new String[files.length];
     this.samples = new SoundFile[files.length];
+    this.sampleStarts = new float[files.length];
     
     for (int i=0;i<pitches.length;i++){
       this.samplePitches[i] = pitches[i];
       this.filePaths[i] = files[i];
+      this.sampleStarts[i] = starts[i];
       this.samples[i] = new SoundFile(this.app, files[i]);
     }
     
@@ -54,8 +62,8 @@ class Instrument{
   void playNote(int midiNote, float duration){
     PitchData info = getPitchRate(midiNote);
     this.samples[info.index].stop();
-    this.samples[info.index].rate(info.rate);
-    this.samples[info.index].play();
+    this.samples[info.index].cue(this.sampleStarts[info.index]);
+    this.samples[info.index].play(info.rate);
     
   }
   
