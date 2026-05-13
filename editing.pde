@@ -73,7 +73,40 @@ class EditManager {
 
     return "";
   }
+  
+  void HistorySave(){
+    String[] history = new String[undoList.size()];
+    
+    for(int i = 0; i < undoList.size(); i++){
+      history[i] = undoList.get(i);
+    }
+    saveStrings("history.txt", history);
+  }
+  
+  void MoveAction(String itemName){
+    drag = true;
+    DraggedItem = itemName;
+    dragX = mouseX;
+    dragY = mouseY;
+    
+  }
+  
+  void dragUpdate(){
+    if(drag){
+      dragX = mouseX;
+      dragY = mouseY;
+    }
+  }
+  
 }
+/*REMAINING
+-placing/snap into place
+-deleting
+-draw/display the trashcan and the item dragged
+
+*/
+
+
 //should also store all the actions into a textfile so that it can be reached for undo/redo
 
 /*when moving/dragging the notes and stuff, it will work as a drag and drop sorta, 

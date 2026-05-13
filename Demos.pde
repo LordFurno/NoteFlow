@@ -80,6 +80,11 @@ class Demo{
     println("Rests: " + restCount);
   }
 }
+/*all i really think that's left is to sort of assign values and stuff for each demo
+I think the foundation is pretty good, it's just setting values and stuff
+*/
+
+
   //this is just the foundation/structure for the demos
   /*
   //fields
