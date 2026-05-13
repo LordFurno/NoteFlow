@@ -27,9 +27,9 @@ class EditManager {
     redoList = new ArrayList<String>();
     
     drag = false;
-    draggedItem = "";
+    DraggedItem = "";
     
-    snapSpacing = 30;
+    snapSpace = 30;
     snapX = 200;
     snapY = 200;
     
