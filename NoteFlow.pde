@@ -17,9 +17,10 @@ String[] sharpMajorKeys = {"C", "G", "D", "A", "E", "B", "F#", "C#"};
 String[] flatMajorKeys = {"C", "F", "Bb", "Eb", "Ab", "Db", "Gb", "Cb"};
 
 void setup() {
-  size(1000, 700);
+  size(1000, 700); 
   frameRate(60);
-
+  
+  
  
 }
 

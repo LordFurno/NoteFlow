@@ -2,7 +2,7 @@
 int homePage = 0;
 int demosPage = 1;
 int libraryPage = 2;
-int editor = 3;
+int FAQPage = 3;
 int currentScreen = homePage;
 
 //NaviBar x,y vaues for labels(avoids hardcoding)
@@ -18,8 +18,8 @@ void drawScreen(){
   drawDemos();
   } else if(currentScreen == libraryPage){
   drawLibrary();
-  }//else if (currentScreen == editorPage){
-  //drawEditor();
+  }//else if (currentScreen == FAQPage){
+  //drawFAQ();
   //} 
 }
 
@@ -178,11 +178,16 @@ void drawLibrary(){
     text("Project " + (i+1), 500, 170 + i*90);
   }
 }
+void drawFAQ(){
+
+
+}
+
 
 void naviBarText(){
   text("Features", headerX,headerY);
   text("Library", headerX+150,headerY);
   text("Explore Demo's", headerX+280,headerY);  
   text("FAQ", headerX+480,headerY);
-
+  
 }
