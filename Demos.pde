@@ -1,85 +1,88 @@
 class Demo{
   
   //Fields
-  String demoName;
-  TimeSignature timeSig;
-  KeySignature keySig;
-  Instrument instrumentType;
-  
-  ArrayList <MusicEvent> demoEvents;
+  MusicalPiece piece; 
   
   float xPoint, yPoint;
   float space;
   
   //Constructor
-  Demo(String numDem, TimeSignature t, KeySignature k, Instrument i ){
+  Demo(MusicalPiece piece){
     
-    this.demoName = numDem;
-
-    this.timeSig = t;
-    this.keySig = k;
-    this.instrumentType = i;
-
-    demoEvents = new ArrayList<MusicEvent>();
+    this.piece = piece;
 
     xPoint = 70;
     yPoint = 140;
     space = 70;
   }
   
-  void addNote(float duration, int midiPitch){
-    
-    Note n = new Note(duration, midiPitch, instrumentType);
-    demoEvents.add(n);
-  }
   
-  void addRest(float duration) {
-
-    Rest r = new Rest(duration);
-    demoEvents.add(r);
-  }
   
   void playDemo(){
     
-    for(MusicEvent e : demoEvents){
-      
-      if(e instanceof Note){
-        
-        Note n = (Note)e;
-        n.play();
-        
-        delay(int((60000.0 / bpm) * n.duration));
-      }
-      else{
-        
-        delay(int((60000.0 / bpm) * e.duration));
-      }
-    }
+    this.piece.play();
   }
+  
   
   void DemoAnalyze(){
     
-    int noteCount = 0;
-    int restCount = 0;
 
-    for (MusicEvent e : demoEvents) {
-
-      if (e instanceof Note) {
-        noteCount++;
-      }
-      else {
-        restCount++;
-      }
+    println("Demo Name: " + this.piece.title);
+    println("Instruments: " );
+    for (Instrument i: this.piece.instruments){
+       println(i.name);
     }
     
-    println("Demo Name: " + demoName);
-    println("Instrument: " + instrumentType.name);
-    println("Time Signature: " + timeSig.toString());
-    println("Key Signature: " + keySig.getKeyName());
-    println("Notes: " + noteCount);
-    println("Rests: " + restCount);
+    println("Time Signature: " + this.piece.timeSig.toString());
+    println("Key Signature: " + this.piece.keySig.getKeyName());
   }
 }
+
+MusicalPiece createDemo1(PApplet app){
+  KeySignature keySig = new KeySignature(true, 1);
+  TimeSignature timeSig = new TimeSignature(4,4);
+  int tempo = 60;
+  
+  int[] saxPitches = {60};
+
+  String[] saxFiles = {"altoSax/C4.aif"};
+  float [] saxStarts = {0.21};
+  Instrument sax = new Instrument("Alto sax", saxPitches, saxFiles, saxStarts, app);
+  
+  
+  MusicalPiece demo1 = new MusicalPiece("Demo 1", keySig, timeSig, tempo);
+  demo1.addInstrument(sax);
+  
+  //Do 3 measures
+  demo1.addMeasure();
+  demo1.addMeasure();
+  demo1.addMeasure();
+  
+  //Measure 1
+  demo1.placeEvent(0,0,0, new Note(1.0, 67, sax));
+  demo1.placeEvent(0,0,1, new Note(1.0, 67, sax));
+  demo1.placeEvent(0,0,2, new Note(0.5, 67, sax));
+  demo1.placeEvent(0,0,3, new Note(0.5, 67, sax));
+  demo1.placeEvent(0,0,4, new Note(0.5, 67, sax));
+  demo1.placeEvent(0,0,5, new Note(0.5, 67, sax));
+  
+  //Measure 2
+  demo1.placeEvent(0,1,0, new Note(1.0, 67, sax));
+  
+  demo1.placeEvent(0,1,3, new Note(0.25, 67, sax));
+  demo1.placeEvent(0,1,4, new Note(0.25, 67, sax));
+  demo1.placeEvent(0,1,5, new Note(0.25, 67, sax));
+  demo1.placeEvent(0,1,6, new Note(0.25, 67, sax));
+  
+  //Measure 3
+  demo1.placeEvent(0,2,0, new Note(1.0, 68, sax));
+  demo1.placeEvent(0,2,1, new Note(1.0, 69, sax));
+  demo1.placeEvent(0,2,2, new Note(1.0, 70, sax));
+  demo1.placeEvent(0,2,3, new Note(1.0, 71, sax));
+  
+  return demo1;
+}
+
 /*all i really think that's left is to sort of assign values and stuff for each demo
 I think the foundation is pretty good, it's just setting values and stuff
 */
