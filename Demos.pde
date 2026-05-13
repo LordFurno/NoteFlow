@@ -13,7 +13,7 @@ class Demo{
   //constructor
   Demo(String numDem, TimeSignature t, KeySignature k, Instrument i ){
     
-    this.demoName = name;
+    this.demoName = numDem;
 
     this.timeSig = t;
     this.keySig = k;
