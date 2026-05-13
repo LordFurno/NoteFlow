@@ -1,12 +1,43 @@
 class EditManager {
 
+  //fields
   ArrayList<String> undoList;
   ArrayList<String> redoList;
+  
+  boolean drag;
+  String DraggedItem;
+  
+  float dragX;
+  float dragY;
+  
+  float snapSpace;
+  float snapX;
+  float snapY;
+  
+  float trashX;
+  float trashY;
+  float trashW;
+  float trashH;
 
+
+  //constructor
   EditManager() {
 
     undoList = new ArrayList<String>();
     redoList = new ArrayList<String>();
+    
+    drag = false;
+    draggedItem = "";
+    
+    snapSpacing = 30;
+    snapX = 200;
+    snapY = 200;
+    
+    trashX = 500;
+    trashY = 600;
+    trashW = 100;
+    trashH = 50;
+    
   }
   
   void ActionAdd(String action){

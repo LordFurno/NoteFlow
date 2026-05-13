@@ -1,7 +1,89 @@
 class Demo{
+  //Fields
+  String demoName;
+  TimeSignature timeSig;
+  KeySignature keySig;
+  Instrument instrumentType;
+  
+  ArrayList<MusicEvent> demoEvent;
+  
+  float xPoint, yPoint;
+  float space;
+  
+  //constructor
+  Demo(String numDem, TimeSignature t, KeySignature k, Instrument i ){
+    
+    this.demoName = name;
+
+    this.timeSig = t;
+    this.keySig = k;
+    this.instrument = i;
+
+    demoEvents = new ArrayList<MusicEvent>();
+
+    startX = 70;
+    startY = 140;
+    spacing = 70;
+  }
+  
+  void addNote(float duration, int midiPitch){
+    Note n = new Note(duration, midiPitch, instrument);
+    demoEvents.add(n);
+  }
+  
+  void addRest(float duration) {
+
+    Rest r = new Rest(duration);
+    demoEvents.add(r);
+  }
+  
+  void playDemo(){
+    for(MusicEvent e : demoEvents){
+      if(e instanceof Note){
+        Note n = (Note)e;
+        n.play();
+        
+        delay(int((60000.0 / bpm) * n.duration));
+      }
+      
+      else{
+        
+        delay(int((60000.0 / bpm) * e.duration));
+      }
+    }
+  }
+  
+  void DemoAnalyze(){
+    
+    int noteCount = 0;
+    int restCount = 0;
+
+    for (MusicEvent e : demoEvents) {
+
+      if (e instanceof Note) {
+        noteCount++;
+      }
+      else {
+        restCount++;
+      }
+    }
+    
+    println("Demo Name" + demoName);
+    println("Instruments:" + instrument.name);
+    println("Time Signature:" + timeSig.toString());
+    println("Key Signature:" + keySig.getKeyName());
+    println("Notes:" + noteCount);
+    println("Rests:" + restCount);
+    
+  }
+  
+  void drawDemo(float x, float y){
+  }
+  
   //this is just the foundation/structure for the demos
   /*
-  fields
+  //fields
+  
   int or float for the time and key signature, instrument is prob string
   int/float KeySig;
   int/float TimeSig;
