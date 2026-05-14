@@ -20,6 +20,10 @@ void setup() {
   size(1000, 700); 
   frameRate(60);
   
+  MusicalPiece temp = createDemo1(this);
+  Demo demo1 = new Demo(temp);
+  demo1.playDemo();
+  
   
  
 }
