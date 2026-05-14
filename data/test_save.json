@@ -1,0 +1,154 @@
+{
+  "instruments": [{
+    "name": "Alto sax",
+    "pitches": "60",
+    "files": "altoSax/C4.aif",
+    "starts": "0.21"
+  }],
+  "tempo": 60,
+  "timeSig": {
+    "upper": 4,
+    "lower": 4
+  },
+  "title": "Demo 1",
+  "keySig": {
+    "accidentalCount": 1,
+    "sharp": true
+  },
+  "tracks": [[
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 0.5,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 0.5,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 0.5,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 0.5,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 0.25,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 0.25,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 0.25,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 0.25,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 68
+        },
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 69
+        },
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 70
+        },
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 71
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        }
+      ]
+    }
+  ]]
+}
