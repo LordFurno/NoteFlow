@@ -1,5 +1,5 @@
 import processing.sound.*;
-
+import g4p_controls.*;
 
 
 // ---- Available instruments ----
