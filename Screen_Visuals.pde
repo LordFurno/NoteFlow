@@ -36,9 +36,9 @@ void drawHome(){
   rect(-10,-10,1010,80);
   
   fill(255);
-  textSize(50);
+  textSize(45);
   
-  text("Introduction", 700,300);
+  text("Compose without limits.", 500,350);
   
   noStroke();
   fill(255,25);
@@ -184,10 +184,19 @@ void drawFAQ(){
 }
 
 
-void naviBarText(){
-  text("Features", headerX,headerY);
-  text("Library", headerX+150,headerY);
-  text("Explore Demo's", headerX+280,headerY);  
-  text("FAQ", headerX+480,headerY);
-  
+void naviBarText() {
+  textSize(25);
+  textAlign(LEFT);
+
+  for (int i = 0; i < navLabels.length; i++) {
+    if (isNavHovered(i)) {
+      noFill();
+      stroke(255);
+      strokeWeight(2);
+      rect(navX[i] - navPad, navY - 22, navW[i] + navPad*2, navBoxH, 6);
+    }
+    fill(255);
+    noStroke();
+    text(navLabels[i], navX[i], navY);
+  }
 }
