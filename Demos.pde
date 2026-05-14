@@ -87,9 +87,104 @@ class Demo{
 //  demo1.placeEvent(0,4,1, new Note(1.0, 75, sax));
 //  demo1.placeEvent(0,4,2, new Note(1.0, 76, sax));
 //  demo1.placeEvent(0,4,3, new Note(1.0, 77, sax));
- 
+
 //  return demo1;
 //}
+MusicalPiece test(PApplet app){
+  KeySignature keySig = new KeySignature(true, 1);
+  TimeSignature timeSig = new TimeSignature(4,4);
+  int tempo = 116;
+
+
+
+  int[] pianoPitches = {60};
+  String[] pianoFiles = {"piano/C4.aiff"};
+  float[] pianoStarts = {0.0};
+
+  Instrument sax = new Instrument("Piano", pianoPitches, pianoFiles, pianoStarts, app);
+
+  MusicalPiece demo2 = new MusicalPiece("Demo 2", keySig, timeSig, tempo);
+  demo2.addInstrument(sax);
+
+  //10 bars in total
+  demo2.addMeasure(); //Empty measure
+  demo2.addMeasure();
+  demo2.addMeasure();
+  demo2.addMeasure();
+  demo2.addMeasure();
+  demo2.addMeasure();
+  demo2.addMeasure();
+  demo2.addMeasure();
+  demo2.addMeasure();
+  demo2.addMeasure();
+
+  //Pickup into the solo
+  demo2.placeEventAtBeat(0,1,2.5, new Note(0.5, 83, sax));
+  demo2.placeEventAtBeat(0,1,3.0, new Note(0.5, 81, sax));
+  demo2.placeEventAtBeat(0,1,3.5, new Note(0.5, 79, sax));
+
+  //Measure 5
+  demo2.placeEventAtBeat(0,2,0.0, new Note(0.5, 83, sax));
+  demo2.placeEventAtBeat(0,2,0.5, new Note(1.5, 79, sax));
+  demo2.placeEventAtBeat(0,2,2.5, new Note(0.5, 76, sax));
+
+  demo2.placeEventAtBeat(0,2,3.0, new Note(1.0, 79, sax));
+
+  //Measure 6
+  demo2.placeEventAtBeat(0,3,0.0, new Note(2.0, 76, sax));
+  demo2.placeEventAtBeat(0,3,2.5, new Note(0.5, 79, sax));
+  demo2.placeEventAtBeat(0,3,3.0, new Note(0.5, 79, sax));
+  demo2.placeEventAtBeat(0,3,3.5, new Note(0.5, 81, sax));
+
+  //Measure 7
+  demo2.placeEventAtBeat(0,4,0.0, new Note(0.5, 83, sax));
+  demo2.placeEventAtBeat(0,4,0.5, new Note(0.5, 81, sax));
+  demo2.placeEventAtBeat(0,4,1.0, new Note(0.5, 79, sax));
+  demo2.placeEventAtBeat(0,4,1.5, new Note(0.5, 81, sax));
+  demo2.placeEventAtBeat(0,4,2.0, new Note(0.5, 83, sax));
+  demo2.placeEventAtBeat(0,4,2.5, new Note(0.5, 81, sax));
+  demo2.placeEventAtBeat(0,4,3.0, new Note(0.5, 79, sax));
+  demo2.placeEventAtBeat(0,4,3.5, new Note(0.5, 79, sax));
+
+  //Measure 8
+  demo2.placeEventAtBeat(0,5,0.0, new Note(2.0, 76, sax));
+  demo2.placeEventAtBeat(0,5,2.5, new Note(0.5, 83, sax));
+  demo2.placeEventAtBeat(0,5,3.0, new Note(0.5, 81, sax));
+  demo2.placeEventAtBeat(0,5,3.5, new Note(0.5, 79, sax));
+
+  //Measure 9
+  demo2.placeEventAtBeat(0,6,0.0, new Note(0.5, 83, sax));
+  demo2.placeEventAtBeat(0,6,0.5, new Note(0.5, 86, sax));
+
+  demo2.placeEventAtBeat(0,6,2.5, new Note(0.5, 76, sax));
+  demo2.placeEventAtBeat(0,6,3.0, new Note(0.5, 79, sax));
+  demo2.placeEventAtBeat(0,6,3.5, new Note(0.5, 79, sax));
+
+  //Measure 10
+  //Natural doesn't matter because no grace note
+  demo2.placeEventAtBeat(0,7,0.0, new Note(0.25, 81, sax));
+  demo2.placeEventAtBeat(0,7,0.25, new Note(0.25, 79, sax));
+  demo2.placeEventAtBeat(0,7,0.5, new Note(1.5, 76, sax)); //Does dotted half work?
+
+  demo2.placeEventAtBeat(0,7,2.5, new Note(0.5, 76, sax));
+  demo2.placeEventAtBeat(0,7,3.0, new Note(0.5, 79, sax));
+  demo2.placeEventAtBeat(0,7,3.5, new Note(0.5, 81, sax));
+
+  //Measure 11
+  demo2.placeEventAtBeat(0,8,0.0, new Note(0.5, 83, sax));
+  demo2.placeEventAtBeat(0,8,0.5, new Note(0.5, 81, sax));
+  demo2.placeEventAtBeat(0,8,1.0, new Note(0.5, 79, sax));
+  demo2.placeEventAtBeat(0,8,1.5, new Note(0.5, 81, sax));
+  demo2.placeEventAtBeat(0,8,2.0, new Note(0.5, 83, sax));
+  demo2.placeEventAtBeat(0,8,2.5, new Note(0.5, 81, sax));
+  demo2.placeEventAtBeat(0,8,3.0, new Note(0.5, 79, sax));
+  demo2.placeEventAtBeat(0,8,3.5, new Note(0.5, 79, sax));
+
+  //Measure 12
+  demo2.placeEventAtBeat(0,9,0.0, new Note(1.5, 76, sax));
+
+  return demo2;
+}
 
 MusicalPiece createDemo2(PApplet app){
   KeySignature keySig = new KeySignature(true, 1);
@@ -192,6 +287,72 @@ MusicalPiece createDemo2(PApplet app){
   
   return demo2;
 }
+
+MusicalPiece createDemo3(PApplet app){
+  KeySignature keySig = new KeySignature(true, 0);
+  TimeSignature timeSig = new TimeSignature(4,4);
+  int tempo = 108;
+
+  int[] pianoPitches = {60};
+  String[] pianoFiles = {"piano/C4.aiff"};
+  float[] pianoStarts = {0.0};
+
+  Instrument rootPiano = new Instrument("Piano Root", pianoPitches, pianoFiles, pianoStarts, app);
+  Instrument thirdPiano = new Instrument("Piano Third", pianoPitches, pianoFiles, pianoStarts, app);
+  Instrument fifthPiano = new Instrument("Piano Fifth", pianoPitches, pianoFiles, pianoStarts, app);
+
+  MusicalPiece demo3 = new MusicalPiece("Chord Progression Test", keySig, timeSig, tempo);
+  demo3.addInstrument(rootPiano);  //Track 0
+  demo3.addInstrument(thirdPiano); //Track 1
+  demo3.addInstrument(fifthPiano); //Track 2
+
+  //4 measures total
+  demo3.addMeasure();
+  demo3.addMeasure();
+  demo3.addMeasure();
+
+  //Measure 1: C major to G major
+  demo3.placeEventAtBeat(0,0,0.0, new Note(2.0, 60, rootPiano));
+  demo3.placeEventAtBeat(1,0,0.0, new Note(2.0, 64, thirdPiano));
+  demo3.placeEventAtBeat(2,0,0.0, new Note(2.0, 67, fifthPiano));
+
+  demo3.placeEventAtBeat(0,0,2.0, new Note(2.0, 55, rootPiano));
+  demo3.placeEventAtBeat(1,0,2.0, new Note(2.0, 62, thirdPiano));
+  demo3.placeEventAtBeat(2,0,2.0, new Note(2.0, 67, fifthPiano));
+
+  //Measure 2: A minor to F major
+  demo3.placeEventAtBeat(0,1,0.0, new Note(2.0, 57, rootPiano));
+  demo3.placeEventAtBeat(1,1,0.0, new Note(2.0, 60, thirdPiano));
+  demo3.placeEventAtBeat(2,1,0.0, new Note(2.0, 64, fifthPiano));
+
+  demo3.placeEventAtBeat(0,1,2.0, new Note(2.0, 53, rootPiano));
+  demo3.placeEventAtBeat(1,1,2.0, new Note(2.0, 60, thirdPiano));
+  demo3.placeEventAtBeat(2,1,2.0, new Note(2.0, 65, fifthPiano));
+
+  //Measure 3: D minor to G major
+  demo3.placeEventAtBeat(0,2,0.0, new Note(2.0, 50, rootPiano));
+  demo3.placeEventAtBeat(1,2,0.0, new Note(2.0, 57, thirdPiano));
+  demo3.placeEventAtBeat(2,2,0.0, new Note(2.0, 65, fifthPiano));
+
+  demo3.placeEventAtBeat(0,2,2.0, new Note(2.0, 55, rootPiano));
+  demo3.placeEventAtBeat(1,2,2.0, new Note(2.0, 62, thirdPiano));
+  demo3.placeEventAtBeat(2,2,2.0, new Note(2.0, 67, fifthPiano));
+
+  //Measure 4: E minor to C major
+  demo3.placeEventAtBeat(0,3,0.0, new Note(2.0, 52, rootPiano));
+  demo3.placeEventAtBeat(1,3,0.0, new Note(2.0, 59, thirdPiano));
+  demo3.placeEventAtBeat(2,3,0.0, new Note(2.0, 67, fifthPiano));
+
+  demo3.placeEventAtBeat(0,3,2.0, new Note(2.0, 48, rootPiano));
+  demo3.placeEventAtBeat(1,3,2.0, new Note(2.0, 60, thirdPiano));
+  demo3.placeEventAtBeat(2,3,2.0, new Note(2.0, 64, fifthPiano));
+
+  return demo3;
+}
+
+
+
+
 
 /*all i really think that's left is to sort of assign values and stuff for each demo
 I think the foundation is pretty good, it's just setting values and stuff

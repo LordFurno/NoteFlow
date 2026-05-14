@@ -3,6 +3,7 @@ int homePage = 0;
 int demosPage = 1;
 int libraryPage = 2;
 int FAQPage = 3;
+int demoVisualPage = 4;
 int currentScreen = homePage;
 
 //NaviBar x,y vaues for labels(avoids hardcoding)
@@ -18,6 +19,8 @@ void drawScreen(){
   drawDemos();
   } else if(currentScreen == libraryPage){
   drawLibrary();
+  } else if(currentScreen == demoVisualPage){
+  drawDemoVisual();
   }//else if (currentScreen == FAQPage){
   //drawFAQ();
   //} 
@@ -122,13 +125,14 @@ void drawDemos(){
   textSize(35);
   text("Try out our default demo's to get accustomed to our software!", width/2, 200);
 
+  String[] demoNames = {"Demo 1", "Demo 2", "Chord Test"};
   for(int i = 0; i < 3; i++){
     fill(255);
     rect(120 + i*290, 320, 200, 150, 25);
 
     fill(0);
     textSize(30);
-    text("Demo " + (i+1), 220 + i*290, 405);
+    text(demoNames[i], 220 + i*290, 405);
   }
 }
 
@@ -183,6 +187,40 @@ void drawFAQ(){
 
 }
 
+void drawDemoVisual(){
+  background(0);
+
+  fill(119, 61, 255);
+  rect(-10,-10,1010,80);
+
+  noStroke();
+  fill(255);
+  rect(20,40,30,20);
+  triangle(10,40, 35,10, 60,40);
+
+  stroke(5);
+  fill(0);
+  line(15,33, 35,10);
+  line(15,43, 35,20);
+  line(15,33, 15,55);
+  line(35,10, 35,50);
+  ellipse(30,50, 10,5);
+  ellipse(10,55, 10,5);
+
+  strokeWeight(2);
+  textSize(25);
+  fill(255);
+  textAlign(LEFT);
+  naviBarText();
+
+  textAlign(CENTER);
+  textSize(38);
+  text(demoEqualizer.displayTitle(), width/2, 145);
+
+  if (demoEqualizer.draw()){
+    currentScreen = demosPage;
+  }
+}
 
 void naviBarText() {
   textSize(25);

@@ -1,0 +1,150 @@
+class DemoEqualizer {
+  MusicalPiece piece;
+  int startMs = 0;
+  float[] bars = new float[12];
+  String[] labels = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
+
+  void start(MusicalPiece newPiece){
+    stop();
+    piece = newPiece;
+    startMs = millis();
+    clearBars();
+    piece.startPlayback();
+  }
+
+  void stop(){
+    if (piece != null){
+      piece.stopPlayback();
+      piece = null;
+    }
+  }
+
+  String displayTitle(){
+    if (piece == null){
+      return "Demo Equalizer";
+    }
+    return piece.title + " Equalizer";
+  }
+
+  boolean draw(){
+    if (piece == null){
+      textSize(24);
+      fill(255);
+      textAlign(CENTER);
+      text("Click a demo card to start the visualizer", width/2, 350);
+      decayBars();
+      drawBars();
+      return false;
+    }
+
+    if (updateBars()){
+      stop();
+      return true;
+    }
+
+    drawBars();
+    drawProgress();
+    return false;
+  }
+
+  boolean updateBars(){ //Updates bars by going through the music piece itself
+    decayBars(); //Have them go down
+
+    float quarterMs = 60000.0 / this.piece.tempo;
+    float totalBeat = (millis() - startMs) / quarterMs;
+    float measureDuration = piece.timeSig.measureDuration();
+    int measureID = int(totalBeat / measureDuration);
+
+    if (measureID >= this.piece.measureCount()){
+      return true;
+    }
+
+    float beatInMeasure = totalBeat - measureID * measureDuration;
+
+    for (int t=0;t<this.piece.tracks.size();t++){
+      if (measureID >= this.piece.tracks.get(t).size()){
+        continue;
+      }
+
+      Measure measure = this.piece.getMeasure(t, measureID);
+      float currentBeat = 0;
+
+      for (MusicEvent event: measure.events){
+        float nextBeat = currentBeat + event.duration;
+
+        if (beatInMeasure >= currentBeat - MUSIC_EPSILON && beatInMeasure < nextBeat - MUSIC_EPSILON){
+          boostBar(event, beatInMeasure, currentBeat);
+        }
+
+        currentBeat = nextBeat;
+      }
+    }
+
+    return false;
+  }
+
+  void boostBar(MusicEvent event, float beatInMeasure, float eventBeat){
+    if (event instanceof Note){
+      Note n = (Note) event;
+      int bar = n.midiNote % bars.length;
+
+      float noteAge = beatInMeasure - eventBeat;
+      float strength = 1.0 - (noteAge / max(event.duration, MUSIC_EPSILON)) * 0.45;
+      float targetHeight = map(n.midiNote, 50, 90, 90, 330) * strength;
+
+      bars[bar] = max(bars[bar], targetHeight);
+    }
+  }
+
+  void decayBars(){
+    for (int i=0;i<bars.length;i++){
+      bars[i] *= 0.9;
+    }
+  }
+
+  void clearBars(){
+    for (int i=0;i<bars.length;i++){
+      bars[i] = 0;
+    }
+  }
+
+  void drawBars(){
+    float left = 100;
+    float bottom = 610;
+    float barGap = 10;
+    float barW = (width - left*2 - barGap*11) / 12.0;
+
+    noStroke();
+    for (int i=0;i<bars.length;i++){
+      float x = left + i * (barW + barGap);
+      float h = constrain(bars[i], 18, 360);
+
+      fill(255, 255, 255, 35);
+      rect(x, bottom - 360, barW, 360, 5);
+
+      fill(119, 61, 255);
+      rect(x, bottom - h, barW, h, 5);
+
+      fill(255, 220);
+      rect(x, bottom - h, barW, min(12, h), 5);
+
+      fill(255);
+      textSize(14);
+      textAlign(CENTER);
+      text(labels[i], x + barW/2, bottom + 25);
+    }
+  }
+
+  void drawProgress(){
+    float quarterMs = 60000.0 / piece.tempo;
+    float totalBeat = (millis() - startMs) / quarterMs;
+    float measureDuration = piece.timeSig.measureDuration();
+    int measureID = int(totalBeat / measureDuration);
+    float beatInMeasure = totalBeat - measureID * measureDuration;
+
+    textSize(22);
+    fill(255);
+    textAlign(CENTER);
+    text("Measure " + (measureID+1) + "  Beat " + nf(beatInMeasure+1, 1, 2), width/2, 205);
+  }
+}

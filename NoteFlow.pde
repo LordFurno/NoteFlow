@@ -24,6 +24,9 @@ int navY = 50;
 int navBoxH = 28;
 int navPad  = 6;
 
+// ---- Demo visualizer data ----
+DemoEqualizer demoEqualizer;
+
 void setup() {
   size(1000, 700);
   frameRate(60);
@@ -31,11 +34,8 @@ void setup() {
   // Now headerX and page constants exist, safe to use
   navX = new int[]{headerX, headerX+150, headerX+280, headerX+480};
   navScreens = new int[]{demosPage, libraryPage, demosPage, homePage};
+  demoEqualizer = new DemoEqualizer();
 
-
-  MusicalPiece temp = createDemo2(this);
-  Demo demo1 = new Demo(temp);
-  demo1.playDemo();
 
   //Save/load test
   //SavedPiece sp = new SavedPiece("data/test_save.json", temp);

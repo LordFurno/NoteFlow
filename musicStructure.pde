@@ -215,7 +215,7 @@ class MusicalPiece{
   //trackID is the index of which track in the piece
   //measureID is the index of the measure within a specific track
   //eventID is the specific note within the measure that is being placed/edited
-  boolean x(int trackID, int measureID, int eventID, MusicEvent event){
+  boolean placeEvent(int trackID, int measureID, int eventID, MusicEvent event){
     Measure measure = getMeasure(trackID, measureID);
     MusicEvent oldEvent = measure.events.get(eventID);
     
@@ -285,34 +285,44 @@ class MusicalPiece{
       public void run() {
         //1 quarter note is 1000ms at 60bpm
         float quarterMs = 60000.0 / tempo; //Converts to milliseconds
-        
+
         for (int m=0; m<measureCount() && playing; m++){ //Goes through each measure
           float currentBeat = 0;
-          
-          while (currentBeat < timeSig.measureDuration() - MUSIC_EPSILON && playing){
-            float smallestDuration = timeSig.measureDuration();
-            //Need ot track smallest because of multiple tracks
-            //Having potentially diffent beats to go through
-            
+          float measureDuration = timeSig.measureDuration();
+
+          while (currentBeat < measureDuration - MUSIC_EPSILON && playing){
+            float nextBeat = measureDuration;
+
             for (int t=0;t<tracks.size();t++){ //Goesthrough each track
+              if (m >= tracks.get(t).size()){
+                continue;
+              }
+
               Measure measure = getMeasure(t, m);
               MusicEvent event = eventAtBeat(measure, currentBeat);
-              
+
               if (event != null){//Someting there
                 if (event instanceof Note){ //Is a note
                   Note n = (Note) event;
                   int resolved = measure.resolvePitch(n.midiNote, keySig);
-                  n.family.playNote(resolved, n.duration);
+                  instruments.get(t).playNote(resolved, n.duration);
                 }else{
                   instruments.get(t).stopAll(); //Stop playing for this specific track
                 }
-                
-                smallestDuration = min(smallestDuration, event.duration);
+              }
+
+              float upcomingBeat = nextEventBeatAfter(measure, currentBeat);
+              if (upcomingBeat > currentBeat + MUSIC_EPSILON){
+                nextBeat = min(nextBeat, upcomingBeat);
               }
             }
-            
-            waitForBeats(smallestDuration, quarterMs);
-            currentBeat += smallestDuration;
+
+            if (nextBeat <= currentBeat + MUSIC_EPSILON){
+              break;
+            }
+
+            waitForBeats(nextBeat-currentBeat, quarterMs);
+            currentBeat = nextBeat;
           }
         }
         
@@ -331,7 +341,7 @@ class MusicalPiece{
   
   MusicEvent eventAtBeat(Measure measure, float beat){
     float currentBeat = 0;
-    
+
     for (MusicEvent event: measure.events){
       if (abs(currentBeat-beat) < MUSIC_EPSILON){
         return event;
@@ -342,6 +352,19 @@ class MusicalPiece{
     return null;
   }
   
+  float nextEventBeatAfter(Measure measure, float beat){
+    float currentBeat = 0;
+
+    for (MusicEvent event: measure.events){
+      if (currentBeat > beat + MUSIC_EPSILON){
+        return currentBeat;
+      }
+      currentBeat += event.duration;
+    }
+
+    return measure.timeSig.measureDuration();
+  }
+
   void waitForBeats(float beats, float quarterMs){//Wait for these many beats
     try{ //Need to put this in try except bc java is annoying
       Thread.sleep((long)(beats * quarterMs));
