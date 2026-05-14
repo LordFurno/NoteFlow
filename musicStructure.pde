@@ -215,7 +215,7 @@ class MusicalPiece{
   //trackID is the index of which track in the piece
   //measureID is the index of the measure within a specific track
   //eventID is the specific note within the measure that is being placed/edited
-  boolean placeEvent(int trackID, int measureID, int eventID, MusicEvent event){
+  boolean x(int trackID, int measureID, int eventID, MusicEvent event){
     Measure measure = getMeasure(trackID, measureID);
     MusicEvent oldEvent = measure.events.get(eventID);
     
@@ -223,6 +223,46 @@ class MusicalPiece{
       return false;
     }
     return measure.changeEvent(event, eventID);
+  }
+  
+  boolean placeEventAtBeat(int trackID, int measureID, float beat, MusicEvent event){
+    Measure measure = getMeasure(trackID, measureID);
+    
+    if (beat < -MUSIC_EPSILON || beat + event.duration > timeSig.measureDuration() + MUSIC_EPSILON){
+      return false;
+    }
+    
+    float currentBeat = 0;
+    
+    for (int i=0;i<measure.events.size();i++){
+      MusicEvent oldEvent = measure.events.get(i);
+      float nextBeat = currentBeat + oldEvent.duration;
+      
+      if (abs(beat-currentBeat) < MUSIC_EPSILON){
+        if (!(oldEvent instanceof Rest)){
+          return false;
+        }
+        return measure.changeEvent(event, i);
+      }
+      
+      if (beat > currentBeat && beat < nextBeat - MUSIC_EPSILON){
+        if (!(oldEvent instanceof Rest)){
+          return false;
+        }
+        
+        float before = beat - currentBeat;
+        float after = oldEvent.duration - before;
+        
+        measure.events.set(i, new Rest(before));
+        measure.events.add(i+1, new Rest(after));
+        
+        return measure.changeEvent(event, i+1);
+      }
+      
+      currentBeat = nextBeat;
+    }
+    
+    return false;
   }
   
   boolean editEvent(int trackID, int measureID, int eventID, MusicEvent event){

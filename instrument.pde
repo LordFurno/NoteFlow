@@ -37,7 +37,7 @@ class Instrument{
     }
     
   }
-  
+  //Will be talking about this
   PitchData getPitchRate(int targetPitch){
     //First find the closest matching sample pitch and calculate from that
     int minDiff = 1000;

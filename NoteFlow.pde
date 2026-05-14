@@ -33,7 +33,7 @@ void setup() {
   navScreens = new int[]{demosPage, libraryPage, demosPage, homePage};
 
 
-  MusicalPiece temp = createDemo1(this);
+  MusicalPiece temp = createDemo2(this);
   Demo demo1 = new Demo(temp);
   demo1.playDemo();
 
