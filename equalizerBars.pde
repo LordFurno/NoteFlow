@@ -3,7 +3,7 @@ class DemoEqualizer {
   int startMs = 0;
   float[] bars = new float[12];
   String[] labels = {"C","C#","D","D#","E","F","F#","G","G#","A","A#","B"};
-
+  //Different colours for each track/intsrument
   void start(MusicalPiece newPiece){
     stop();
     piece = newPiece;

@@ -157,6 +157,7 @@ class Measure{
   }
 }
 
+//Need to make drawing possible
 class MusicalPiece{
   String title;
   ArrayList<Instrument> instruments;

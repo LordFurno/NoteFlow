@@ -47,7 +47,6 @@ class Instrument{
     for (int i=0;i<this.samplePitches.length;i++){
       int p = this.samplePitches[i];
       if (abs(p-targetPitch) < minDiff){
-        //This is better
         minDiff = abs(p-targetPitch);
         samplePitch = p;
         index = i; //To keep track of the specific sample pitch file location
