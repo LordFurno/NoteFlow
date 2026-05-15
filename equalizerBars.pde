@@ -50,29 +50,31 @@ class DemoEqualizer {
   boolean updateBars(){ //Updates bars by going through the music piece itself
     decayBars(); //Have them go down
 
-    float quarterMs = 60000.0 / this.piece.tempo;
-    float totalBeat = (millis() - startMs) / quarterMs;
-    float measureDuration = piece.timeSig.measureDuration();
-    int measureID = int(totalBeat / measureDuration);
+    float quarterMs = 60000.0 / this.piece.tempo; //How many milliseconds for one quarter note
+    float totalBeat = (millis() - startMs) / quarterMs; //How many beats have passed since the demo has started
+    
+    float measureDuration = this.piece.timeSig.measureDuration(); 
+    int measureID = int(totalBeat / measureDuration); //Finds the current measure based on total beats
 
     if (measureID >= this.piece.measureCount()){
       return true;
     }
 
-    float beatInMeasure = totalBeat - measureID * measureDuration;
+    float beatInMeasure = totalBeat - measureID * measureDuration; //Beat position in the current measure
 
-    for (int t=0;t<this.piece.tracks.size();t++){
+    for (int t=0;t<this.piece.tracks.size();t++){ //For each track
       if (measureID >= this.piece.tracks.get(t).size()){
         continue;
       }
 
-      Measure measure = this.piece.getMeasure(t, measureID);
+      Measure measure = this.piece.getMeasure(t, measureID); //Current measure
       float currentBeat = 0;
 
       for (MusicEvent event: measure.events){
         float nextBeat = currentBeat + event.duration;
 
         if (beatInMeasure >= currentBeat - MUSIC_EPSILON && beatInMeasure < nextBeat - MUSIC_EPSILON){
+          //If this event is in beat
           boostBar(event, beatInMeasure, currentBeat);
         }
 
@@ -86,10 +88,10 @@ class DemoEqualizer {
   void boostBar(MusicEvent event, float beatInMeasure, float eventBeat){
     if (event instanceof Note){
       Note n = (Note) event;
-      int bar = n.midiNote % bars.length;
+      int bar = n.midiNote % bars.length; //What note based on midi
 
       float noteAge = beatInMeasure - eventBeat;
-      float strength = 1.0 - (noteAge / max(event.duration, MUSIC_EPSILON)) * 0.45;
+      float strength = 1.0 - (noteAge / max(event.duration, MUSIC_EPSILON)) * 0.45; //Scale strength based on duration
       float targetHeight = map(n.midiNote, 50, 90, 90, 330) * strength;
 
       bars[bar] = max(bars[bar], targetHeight);

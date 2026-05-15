@@ -40,6 +40,7 @@ class Instrument{
   //Will be talking about this
   PitchData getPitchRate(int targetPitch){
     //First find the closest matching sample pitch and calculate from that
+    //Minimum absolute differenc ebetween target pitch and sample
     int minDiff = 1000;
     int samplePitch = 0;
     int index = -1;
@@ -52,9 +53,12 @@ class Instrument{
         index = i; //To keep track of the specific sample pitch file location
       }
     }
+
     //Calculate new rate based on samplePitch and targetPitch
     int semitoneDifference = targetPitch - samplePitch;
-    float rate = pow(2, semitoneDifference/12.0);
+    //An octave is 12 semitones. 1 octave higher means the frequency doubles
+    //12 semitones up means 2x frequency, and 12 semitones down be 0.5x frequency
+    float rate = pow(2, semitoneDifference/12.0); //Calculates how much faster/slower to play te sample to get proper note
     return new PitchData(rate, index);
     
   }
