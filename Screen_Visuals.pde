@@ -209,10 +209,21 @@ void drawCompose(){
   textAlign(CENTER);
   textSize(32);
   text("Piano Music Sheet", width / 2, 55);
-
+  
   textSize(16);
   fill(170, 130, 230);
   text("Blank composition layout", width / 2, 82);
+  noStroke();
+  fill(108,59,170);
+  rect(20,40,30,20);
+  triangle(10,40, 35,10, 60,40);
+  stroke(5);
+  line(15,33, 35,10);
+  line(15,43, 35,20);
+  line(15,33, 15,55);
+  line(35,10, 35,50);
+  ellipse(30,50, 10,5);
+  ellipse(10,55, 10,5);
 
   int numberOfSystems = 3;
 

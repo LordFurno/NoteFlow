@@ -1,5 +1,3 @@
-
-
 class KeySignature {
 
   // Fields
