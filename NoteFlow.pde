@@ -14,12 +14,16 @@ int[] sharpMidi = {5, 0, 7, 2, 9, 4, 11};
 int[] flatMidi  = {11, 4, 9, 2, 7, 0, 5};
 String[] sharpMajorKeys = {"C", "G", "D", "A", "E", "B", "F#", "C#"};
 String[] flatMajorKeys = {"C", "F", "Bb", "Eb", "Ab", "Db", "Gb", "Cb"};
+EditManager editManager;
+MusicalPiece userPiece;
+Instrument composeInstrument;
+float selectedDuration = 1.0;
 
 // ---- Nav bar data ----
 String[] navLabels = {"Features", "Library", "Explore Demo's", "FAQ"};
-int[] navX;       // initialized in setup
+int[] navX;       //Initialized in setup
 int[] navW = {90, 70, 160, 42};
-int[] navScreens; // initialized in setup
+int[] navScreens; //Initialized in setup
 int navY = 50;
 int navBoxH = 28;
 int navPad  = 6;
@@ -31,12 +35,22 @@ void setup() {
   size(1000, 700);
   frameRate(60);
 
-  // Now headerX and page constants exist, safe to use
   navX = new int[]{headerX, headerX+150, headerX+280, headerX+480};
   navScreens = new int[]{demosPage, libraryPage, demosPage, homePage};
   demoEqualizer = new DemoEqualizer();
-
-
+  editManager = new EditManager();
+  createGUI();
+  //Create the default composition instrument
+  int[] pianoPitches = {60};
+  String[] pianoFiles = {"piano/C4.aiff"};
+  float[] pianoStarts = {0.0};
+  composeInstrument = new Instrument("Piano", pianoPitches, pianoFiles, pianoStarts, this);
+  
+  //Create blank 4 measure piece in C major, 4/4
+  userPiece = new MusicalPiece("My Piece", new KeySignature(true, 0), new TimeSignature(4, 4), 120);
+  userPiece.addInstrument(composeInstrument);
+  userPiece.addMeasures(3);//adds 3 more measures
+  
   //Save/load test
   //SavedPiece sp = new SavedPiece("data/test_save.json", temp);
   //sp.createFile();

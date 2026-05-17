@@ -379,4 +379,9 @@ class MusicalPiece{
       instrument.stopAll();
     }
   }
+  void addMeasures(int count) {
+  for (int i = 0; i < count; i++) {
+    addMeasure();
+  }
+  }
 }

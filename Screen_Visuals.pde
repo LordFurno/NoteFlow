@@ -4,6 +4,7 @@ int demosPage = 1;
 int libraryPage = 2;
 int FAQPage = 3;
 int demoVisualPage = 4;
+int composePage = 5;
 int currentScreen = homePage;
 
 //NaviBar x,y vaues for labels(avoids hardcoding)
@@ -237,4 +238,7 @@ void naviBarText() {
     noStroke();
     text(navLabels[i], navX[i], navY);
   }
+
+
+
 }
