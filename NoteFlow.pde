@@ -21,9 +21,9 @@ float selectedDuration = 1.0;
 
 // ---- Nav bar data ----
 String[] navLabels = {"Features", "Library", "Explore Demo's", "FAQ"};
-int[] navX;       //Initialized in setup
+int[] navX;       
 int[] navW = {90, 70, 160, 42};
-int[] navScreens; //Initialized in setup
+int[] navScreens; 
 int navY = 50;
 int navBoxH = 28;
 int navPad  = 6;
