@@ -13,7 +13,7 @@
  * Do not rename this tab!
  * =========================================================
  */
-String file = "noteDurations.txt";
+
 synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:window1:558967:
   appc.background(230);
 } //_CODE_:window1:558967:
@@ -52,6 +52,14 @@ public void PlayClicked(GButton source, GEvent event) { //_CODE_:PlayButton:4266
   }
 } //_CODE_:PlayButton:426691:
 
+public void button1_click1(GButton source, GEvent event) { //_CODE_:button1:208566:
+  println("button1 - GButton >> GEvent." + event + " @ " + millis());
+} //_CODE_:button1:208566:
+
+public void button2_click1(GButton source, GEvent event) { //_CODE_:button2:343891:
+  println("button2 - GButton >> GEvent." + event + " @ " + millis());
+} //_CODE_:button2:343891:
+
 
 
 // Create all the GUI controls. 
@@ -76,20 +84,28 @@ public void createGUI(){
   RedoButton = new GButton(window1, 131, 30, 81, 30);
   RedoButton.setText("Redo");
   RedoButton.addEventHandler(this, "RedoClicked");
-  NoteKey = new GDropList(window1, 207, 98, 90, 80, 3, 10);
-  NoteKey.setItems(loadStrings(file), 0);
+  NoteKey = new GDropList(window1, 171, 97, 90, 80, 3, 10);
+  NoteKey.setItems(loadStrings("noteDurations.txt"), 0);
   NoteKey.addEventHandler(this, "dropList1_click1");
-  Notes = new GLabel(window1, 210, 66, 80, 20);
+  Notes = new GLabel(window1, 175, 73, 80, 20);
   Notes.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   Notes.setText("Note");
   Notes.setOpaque(false);
-  PlayButton = new GButton(window1, 293, 30, 106, 30);
+  PlayButton = new GButton(window1, 255, 29, 106, 30);
   PlayButton.setText("Play/Pause");
   PlayButton.addEventHandler(this, "PlayClicked");
   label1 = new GLabel(window1, 36, 72, 80, 20);
   label1.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
   label1.setText("BPM");
   label1.setOpaque(false);
+  button1 = new GButton(window1, 374, 29, 80, 30);
+  button1.setText("Reset");
+  button1.setLocalColorScheme(GCScheme.RED_SCHEME);
+  button1.addEventHandler(this, "button1_click1");
+  button2 = new GButton(window1, 328, 92, 80, 30);
+  button2.setText("Save");
+  button2.setLocalColorScheme(GCScheme.GOLD_SCHEME);
+  button2.addEventHandler(this, "button2_click1");
   window1.loop();
 }
 
@@ -103,3 +119,5 @@ GDropList NoteKey;
 GLabel Notes; 
 GButton PlayButton; 
 GLabel label1; 
+GButton button1; 
+GButton button2; 
