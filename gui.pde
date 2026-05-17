@@ -13,7 +13,7 @@
  * Do not rename this tab!
  * =========================================================
  */
-
+String file = "noteDurations.txt";
 synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:window1:558967:
   appc.background(230);
 } //_CODE_:window1:558967:
@@ -61,7 +61,7 @@ public void createGUI(){
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("Sketch Window");
-  window1 = GWindow.getWindow(this, "User Composition", 0, 0, 500, 400, JAVA2D);
+  window1 = GWindow.getWindow(this, "User Composition", 0, 0, 500, 200, JAVA2D);
   window1.noLoop();
   window1.setActionOnClose(G4P.KEEP_OPEN);
   window1.addDrawHandler(this, "win_draw1");
@@ -77,7 +77,7 @@ public void createGUI(){
   RedoButton.setText("Redo");
   RedoButton.addEventHandler(this, "RedoClicked");
   NoteKey = new GDropList(window1, 207, 98, 90, 80, 3, 10);
-  NoteKey.setItems(loadStrings("noteDurations.txt"), 0);
+  NoteKey.setItems(loadStrings(file), 0);
   NoteKey.addEventHandler(this, "dropList1_click1");
   Notes = new GLabel(window1, 210, 66, 80, 20);
   Notes.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
