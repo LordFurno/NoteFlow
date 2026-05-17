@@ -11,6 +11,18 @@ int currentScreen = homePage;
 int headerX = 315;
 int headerY = 50;
 
+//Music Editing Page
+int marginX = 80;
+int startY = 120;
+int staffSpacing = 12;
+int staffGap = 90;
+int systemGap = 170;
+
+color bgColor = color(8, 6, 15);
+color staffColor = color(190, 140, 255);
+color accentPurple = color(140, 70, 255);
+color textColor = color(230, 220, 255);
+
 
 // Draw Page 
 void drawScreen(){
@@ -22,6 +34,8 @@ void drawScreen(){
   drawLibrary();
   } else if(currentScreen == demoVisualPage){
   drawDemoVisual();
+  }else if(currentScreen == composePage){
+  drawCompose();
   }//else if (currentScreen == FAQPage){
   //drawFAQ();
   //} 
@@ -187,6 +201,34 @@ void drawFAQ(){
 
 
 }
+void drawCompose(){
+  background(bgColor);
+
+  // Title
+  fill(textColor);
+  textAlign(CENTER);
+  textSize(32);
+  text("Piano Music Sheet", width / 2, 55);
+
+  textSize(16);
+  fill(170, 130, 230);
+  text("Blank composition layout", width / 2, 82);
+
+  int numberOfSystems = 3;
+
+  for (int i = 0; i < numberOfSystems; i++) {
+    int y = startY + i * systemGap;
+
+    //Upper set of lines
+    drawStaffLines(y);
+
+    //Lower set of lines
+    drawStaffLines(y + staffGap);
+
+    //Measure lines for both sets
+    drawMeasureLines(y);
+  }
+}
 
 void drawDemoVisual(){
   background(0);
@@ -238,7 +280,32 @@ void naviBarText() {
     noStroke();
     text(navLabels[i], navX[i], navY);
   }
+}
 
+void drawStaffLines(int y) {
+  stroke(staffColor);
+  strokeWeight(2);
 
+  for (int i = 0; i < 5; i++) {
+    line(marginX,y + i * staffSpacing,width - marginX,y + i * staffSpacing);
+  }
+}
 
+void drawMeasureLines(int y) {
+  stroke(accentPurple);
+  strokeWeight(2);
+
+  int numberOfMeasures = 4;
+  int sheetWidth = width - marginX * 2;
+  int measureWidth = sheetWidth / numberOfMeasures;
+
+  for (int i = 0; i <= numberOfMeasures; i++) {
+    int x = marginX + i * measureWidth;
+
+    //Measure lines for upper staff
+    line(x, y, x, y + staffSpacing * 4);
+
+    //Measure lines for lower staff
+    line(x, y + staffGap, x, y + staffGap + staffSpacing * 4);
+  }
 }

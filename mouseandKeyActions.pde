@@ -8,6 +8,8 @@ boolean isNavHovered(int i) {
 void mousePressed() {
   if (currentScreen == demosPage && handleDemoCardClick()){
     return;
+  } if (currentScreen == libraryPage && handleLibraryProjectClick()){
+    return;
   }
 
   handleNavClick();
@@ -48,6 +50,23 @@ boolean handleDemoCardClick(){
       }
       return true;
     }
+  }
+
+  return false;
+}
+boolean handleLibraryProjectClick() {
+  float x1 = 150;
+  float y1 = 135;
+  float x2 = 850;
+  float y2 = 200;
+
+  if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
+    stopActiveDemo();
+
+    // Change this to whatever page you want the project to open
+    currentScreen = composePage;
+
+    return true;
   }
 
   return false;
