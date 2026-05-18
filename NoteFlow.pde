@@ -10,10 +10,12 @@ ArrayList<Instrument> availableInstruments;
 int bpm = 120;
 TimeSignature defaultTimeSig;
 KeySignature  defaultKeySig;
+
 int[] sharpMidi = {5, 0, 7, 2, 9, 4, 11};
 int[] flatMidi  = {11, 4, 9, 2, 7, 0, 5};
 String[] sharpMajorKeys = {"C", "G", "D", "A", "E", "B", "F#", "C#"};
 String[] flatMajorKeys = {"C", "F", "Bb", "Eb", "Ab", "Db", "Gb", "Cb"};
+
 EditManager editManager;
 MusicalPiece userPiece;
 Instrument composeInstrument;
@@ -39,7 +41,10 @@ void setup() {
   navScreens = new int[]{demosPage, libraryPage, demosPage, homePage};
   demoEqualizer = new DemoEqualizer();
   editManager = new EditManager();
+  
   createGUI();
+  
+
   //Create the default composition instrument
   int[] pianoPitches = {60};
   String[] pianoFiles = {"piano/C4.aiff"};
@@ -72,6 +77,7 @@ void setup() {
   //  }
   //  println();
   //}
+ 
 }
 
 void draw() {

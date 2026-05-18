@@ -9,11 +9,13 @@ int currentScreen = homePage;
 
 //NaviBar x,y vaues for labels(avoids hardcoding)
 int headerX = 315;
-int headerY = 50;
+int headerY = 35;
+
+int toolbarH = 90;
 
 //Music Editing Page
 int marginX = 80;
-int startY = 120;
+int startY = 140;
 int staffSpacing = 12;
 int staffGap = 90;
 int systemGap = 170;
@@ -319,4 +321,16 @@ void drawMeasureLines(int y) {
     //Measure lines for lower staff
     line(x, y + staffGap, x, y + staffGap + staffSpacing * 4);
   }
+}
+
+
+
+void setGUIVisible(boolean state) {
+  BPM.setVisible(state);
+  UndoButton.setVisible(state);
+  RedoButton.setVisible(state);
+  NoteKey.setVisible(state);
+  PlayButton.setVisible(state);
+  button1.setVisible(state);
+  button2.setVisible(state);
 }
