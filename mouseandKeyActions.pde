@@ -1,8 +1,5 @@
 boolean isNavHovered(int i) {
-  return mouseX >= navX[i] - navPad &&
-         mouseX <= navX[i] + navW[i] + navPad &&
-         mouseY >= navY - 45 &&
-         mouseY <= navY + 45;
+  return mouseX >= navX[i] - navPad && mouseX <= navX[i] + navW[i] + navPad && mouseY >= navY - 45 && mouseY <= navY + 45;
 }
 
 void mousePressed() {
@@ -19,21 +16,23 @@ void mousePressed() {
 }
 
 void handleNavClick() {
-  if (mouseY > 60) return;
-
   if (mouseX > 10 && mouseX < 60) {
-    stopActiveDemo();
-    currentScreen = homePage;
-    updateGUIVisibility();
-    return;
-  }
-
-  for (int i = 0; i < navLabels.length; i++) {
-    if (isNavHovered(i)) {
       stopActiveDemo();
-      currentScreen = navScreens[i];
+      currentScreen = homePage;
       updateGUIVisibility();
       return;
+    }
+    
+  if (currentScreen != composePage){
+    if (mouseY > 60) return;
+  
+    for (int i = 0; i < navLabels.length; i++) {
+      if (isNavHovered(i)) {
+        stopActiveDemo();
+        currentScreen = navScreens[i];
+        updateGUIVisibility();
+        return;
+      }
     }
   }
 }
@@ -44,7 +43,7 @@ boolean handleDemoCardClick() {
     float y = 320;
     float w = 200;
     float h = 150;
-
+  if (currentScreen == demosPage){
     if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
       if (i == 1) {
         startDemo2Visual();
@@ -54,22 +53,31 @@ boolean handleDemoCardClick() {
       return true;
     }
   }
+  }
   return false;
 }
 
 boolean handleLibraryProjectClick() {
   float x1 = 150;
-  float y1 = 135;
   float x2 = 850;
-  float y2 = 200;
-
-  if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
+  float startY = 135;
+  float buttonH = 65;
+  float gap = 90;
+  if (currentScreen == libraryPage){
+  for (int i = 0; i < 6; i++){
+    float y1 = startY + i*gap;
+    float y2 = y1 + buttonH;
+    
+    if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
     stopActiveDemo();
     currentScreen = composePage;
     updateGUIVisibility();
     return true;
+  } 
+  }
   }
   return false;
+  
 }
 
 void startDemo2Visual() {
