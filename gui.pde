@@ -41,7 +41,7 @@ public void createGUI() {
 
   // Note durations
   NoteKey = new GDropList(this, xInitialValueButtons+324, yInitialValueButtons+5, 100, 80, 3, 10);
-  NoteKey.setItems(loadStrings("noteDurations.txt"), 0); 
+  NoteKey.setItems(loadStrings("noteDurations.txt"), 2);
   NoteKey.addEventHandler(this, "dropList1_click1");
 
   // Play
@@ -61,15 +61,42 @@ public void createGUI() {
   button2.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   button2.addEventHandler(this, "button2_click1");
 
+  // Instruments
+  InstrumentKey = new GDropList(this, xInitialValueButtons+754, yInitialValueButtons+5, 120, 80, 3, 10);
+  InstrumentKey.setItems(instrumentNames, 0);
+  InstrumentKey.addEventHandler(this, "InstrumentChanged");
+
   // =========================
   // VOLUME SLIDER
   // =========================
-  VolumeSlider = new GCustomSlider(this, xInitialValueButtons+760, yInitialValueButtons, 140, 40, "grey_blue");
+  VolumeSlider = new GCustomSlider(this, xInitialValueButtons, yInitialValueButtons+45, 140, 40, "grey_blue");
 
   VolumeSlider.setLimits(80, 0, 100);
   VolumeSlider.setNumberFormat(G4P.INTEGER, 0);
   VolumeSlider.setOpaque(false);
   VolumeSlider.addEventHandler(this, "VolumeChanged");
+
+  // Track controls
+  PrevTrackButton = new GButton(this, xInitialValueButtons+160, yInitialValueButtons+50, 80, 30);
+  PrevTrackButton.setText("< Track");
+  PrevTrackButton.addEventHandler(this, "PrevTrackClicked");
+
+  NextTrackButton = new GButton(this, xInitialValueButtons+250, yInitialValueButtons+50, 80, 30);
+  NextTrackButton.setText("Track >");
+  NextTrackButton.addEventHandler(this, "NextTrackClicked");
+
+  AddTrackButton = new GButton(this, xInitialValueButtons+340, yInitialValueButtons+50, 90, 30);
+  AddTrackButton.setText("Add Track");
+  AddTrackButton.addEventHandler(this, "AddTrackClicked");
+
+  DeleteTrackButton = new GButton(this, xInitialValueButtons+440, yInitialValueButtons+50, 95, 30);
+  DeleteTrackButton.setText("Del Track");
+  DeleteTrackButton.setLocalColorScheme(GCScheme.RED_SCHEME);
+  DeleteTrackButton.addEventHandler(this, "DeleteTrackClicked");
+
+  AddMeasureButton = new GButton(this, xInitialValueButtons+545, yInitialValueButtons+50, 110, 30);
+  AddMeasureButton.setText("Add Measure");
+  AddMeasureButton.addEventHandler(this, "AddMeasureClicked");
 
   // =========================
   // SAVE POPUP CONTROLS
@@ -96,7 +123,9 @@ public void createGUI() {
 public void BPMSlider(GCustomSlider source, GEvent event) {
   int newTempo = int(source.getValueF());
 
-  if (demoEqualizer.piece != null) {
+  if (currentScreen == composePage && userPiece != null) {
+    userPiece.tempo = newTempo;
+  }else if (demoEqualizer.piece != null) {
     demoEqualizer.piece.tempo = newTempo;
   }
 }
@@ -104,20 +133,48 @@ public void BPMSlider(GCustomSlider source, GEvent event) {
 public void VolumeChanged(GCustomSlider source, GEvent event) {
 
   masterVolume = source.getValueF() / 100.0;
+  applyMasterVolumeToUserPiece();
+}
 
-  for (Instrument inst : userPiece.instruments) {
-    for (SoundFile s : inst.samples) {
-      s.amp(masterVolume);
-    }
+public void InstrumentChanged(GDropList source, GEvent event) {
+  if (syncingInstrumentDropdown){
+    return;
+  }
+
+  int selected = source.getSelectedIndex();
+
+  if (selected >= 0 && selected < instrumentNames.length){
+    editManager.setActiveTrackInstrument(instrumentNames[selected]);
   }
 }
 
+public void PrevTrackClicked(GButton source, GEvent event) {
+  editManager.changeTrack(-1);
+}
+
+public void NextTrackClicked(GButton source, GEvent event) {
+  editManager.changeTrack(1);
+}
+
+public void AddTrackClicked(GButton source, GEvent event) {
+  editManager.addTrackToPiece(createInstrumentByName(selectedInstrumentName()));
+  applyMasterVolumeToUserPiece();
+}
+
+public void DeleteTrackClicked(GButton source, GEvent event) {
+  editManager.deleteActiveTrack();
+}
+
+public void AddMeasureClicked(GButton source, GEvent event) {
+  editManager.addMeasureToPiece();
+}
+
 public void UndoClicked(GButton source, GEvent event) {
-  editManager.undo();
+  editManager.setStatus("Undo not set up yet");
 }
 
 public void RedoClicked(GButton source, GEvent event) {
-  editManager.redo();
+  editManager.setStatus("Redo not set up yet");
 }
 
 public void dropList1_click1(GDropList source, GEvent event) {
@@ -125,33 +182,40 @@ public void dropList1_click1(GDropList source, GEvent event) {
 
   float[] durations = {4.0, 2.0, 1.0, 0.5, 0.25};
 
-  println("Selected duration: " + durations[selected]);
+  if (selected >= 0 && selected < durations.length){
+    editManager.changeSelectedDuration(durations[selected]);
+  }
 }
 
 public void PlayClicked(GButton source, GEvent event) {
 
-  if (demoEqualizer.piece == null) return;
+  MusicalPiece piece = demoEqualizer.piece;
 
-  if (demoEqualizer.piece.playing) {
-    demoEqualizer.piece.stopPlayback();
+  if (currentScreen == composePage){
+    piece = userPiece;
+  }
+
+  if (piece == null) return;
+
+  if (piece.playing) {
+    piece.stopPlayback();
     source.setText("Play");
   } else {
-    demoEqualizer.piece.startPlayback();
+    piece.startPlayback();
     source.setText("Pause");
   }
 }
 
 public void button1_click1(GButton source, GEvent event) {
-  println("Reset clicked");
+  makeBlankUserPiece("My Piece");
+  source.setText("Reset");
+  PlayButton.setText("Play/Pause");
 }
 
 public void button2_click1(GButton source, GEvent event) {
 
   showSavePopup = true;
-
-  SaveNameBox.setVisible(true);
-  SaveCheckbox.setVisible(true);
-  ConfirmSaveButton.setVisible(true);
+  updateGUIVisibility();
 }
 
 public void ConfirmSaveClicked(GButton source, GEvent event) {
@@ -169,16 +233,12 @@ public void ConfirmSaveClicked(GButton source, GEvent event) {
   }
 
   saveCurrentProject(projectName);
+  editManager.setStatus("Saved " + projectName);
 
-  // Close popup
   showSavePopup = false;
-
-  SaveNameBox.setVisible(false);
-  SaveCheckbox.setVisible(false);
-  ConfirmSaveButton.setVisible(false);
-
   SaveNameBox.setText("");
   SaveCheckbox.setSelected(false);
+  updateGUIVisibility();
 }
 
 /* ================= VARIABLES ================= */
@@ -190,6 +250,7 @@ GButton UndoButton;
 GButton RedoButton;
 
 GDropList NoteKey;
+GDropList InstrumentKey;
 
 GLabel Notes;
 
@@ -199,6 +260,11 @@ GLabel label1;
 
 GButton button1;
 GButton button2;
+GButton PrevTrackButton;
+GButton NextTrackButton;
+GButton AddTrackButton;
+GButton DeleteTrackButton;
+GButton AddMeasureButton;
 
 GTextField SaveNameBox;
 GCheckbox SaveCheckbox;

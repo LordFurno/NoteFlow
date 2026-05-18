@@ -20,6 +20,10 @@ EditManager editManager;
 MusicalPiece userPiece;
 Instrument composeInstrument;
 float selectedDuration = 1.0;
+int minEditorMidi = 48;
+int maxEditorMidi = 84;
+String[] instrumentNames = {"Piano", "Alto sax"};
+boolean syncingInstrumentDropdown = false;
 
 // ---- Save Popup ----
 boolean showSavePopup = false;
@@ -54,17 +58,8 @@ void setup() {
   
   createGUI();
   
-
-  //Create the default composition instrument
-  int[] pianoPitches = {60};
-  String[] pianoFiles = {"piano/C4.aiff"};
-  float[] pianoStarts = {0.0};
-  composeInstrument = new Instrument("Piano", pianoPitches, pianoFiles, pianoStarts, this);
-  
   //Create blank 4 measure piece in C major, 4/4
-  userPiece = new MusicalPiece("My Piece", new KeySignature(true, 0), new TimeSignature(4, 4), 120);
-  userPiece.addInstrument(composeInstrument);
-  userPiece.addMeasures(3);//adds 3 more measures
+  makeBlankUserPiece("My Piece");
   
   loadSavedProjects();
   
@@ -95,4 +90,91 @@ void setup() {
 
 void draw() {
   drawScreen();
+}
+
+Instrument createPianoInstrument(String name){
+  int[] pianoPitches = {60};
+  String[] pianoFiles = {"piano/C4.aiff"};
+  float[] pianoStarts = {0.0};
+  return new Instrument(name, pianoPitches, pianoFiles, pianoStarts, this);
+}
+
+Instrument createAltoSaxInstrument(String name){
+  int[] saxPitches = {60, 55, 74};
+  String[] saxFiles = {"altoSax/C4.aif", "altoSax/G3.aif", "altoSax/D5.aif"};
+  float[] saxStarts = {0.21, 0.4, 0.2};
+  return new Instrument(name, saxPitches, saxFiles, saxStarts, this);
+}
+
+Instrument createInstrumentByName(String name){
+  if (name.equals("Alto sax")){
+    return createAltoSaxInstrument(name);
+  }
+
+  return createPianoInstrument("Piano");
+}
+
+String selectedInstrumentName(){
+  if (InstrumentKey == null){
+    return "Piano";
+  }
+
+  int selected = InstrumentKey.getSelectedIndex();
+  if (selected >= 0 && selected < instrumentNames.length){
+    return instrumentNames[selected];
+  }
+
+  return "Piano";
+}
+
+int instrumentIndexForName(String name){
+  for (int i=0;i<instrumentNames.length;i++){
+    if (instrumentNames[i].equals(name)){
+      return i;
+    }
+  }
+
+  return 0;
+}
+
+void syncInstrumentDropdown(){
+  if (InstrumentKey == null || userPiece == null || userPiece.instruments.size() == 0){
+    return;
+  }
+
+  editManager.keepTrackInRange();
+  String name = userPiece.instruments.get(editManager.activeTrack).name;
+  syncingInstrumentDropdown = true;
+  InstrumentKey.setItems(instrumentNames, instrumentIndexForName(name));
+  syncingInstrumentDropdown = false;
+}
+
+void makeBlankUserPiece(String title){
+  if (userPiece != null){
+    userPiece.stopPlayback();
+  }
+
+  composeInstrument = createPianoInstrument("Piano");
+  userPiece = new MusicalPiece(title, new KeySignature(true, 0), new TimeSignature(4, 4), 120);
+  userPiece.addInstrument(composeInstrument);
+  userPiece.addMeasures(3);//adds 3 more measures
+  applyMasterVolumeToUserPiece();
+
+  if (editManager != null){
+    editManager.resetEditor();
+  }
+
+  syncInstrumentDropdown();
+}
+
+void applyMasterVolumeToUserPiece(){
+  if (userPiece == null){
+    return;
+  }
+
+  for (Instrument inst : userPiece.instruments) {
+    for (SoundFile s : inst.samples) {
+      s.amp(masterVolume);
+    }
+  }
 }

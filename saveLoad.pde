@@ -211,29 +211,70 @@ void loadSavedProjects() {
 
     if (path.endsWith(".json")) {
 
-      String name = path.substring(
-        path.lastIndexOf("/") + 1,
-        path.length() - 5
-      );
+      String name = projectNameFromPath(path);
 
       savedProjects.add(name);
     }
   }
 }
 
+String projectNameFromPath(String path){
+  int slash = Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"));
+  return path.substring(slash + 1, path.length() - 5);
+}
+
+String cleanProjectName(String projectName){
+  String cleaned = projectName.trim();
+  String badChars = "\\/:*?\"<>|";
+
+  for (int i=0;i<badChars.length();i++){
+    cleaned = cleaned.replace(badChars.charAt(i), '_');
+  }
+
+  return cleaned;
+}
+
 
 void saveCurrentProject(String projectName) {
 
+  projectName = cleanProjectName(projectName);
+  if (projectName.equals("")){
+    println("Project name is empty.");
+    return;
+  }
+
   userPiece.title = projectName;
 
-  SavedPiece save = new SavedPiece(
-    "data/" + projectName + ".json",
-    userPiece
-  );
-
+  SavedPiece save = new SavedPiece("data/" + projectName + ".json", userPiece);
   save.createFile();
 
   loadSavedProjects();
 
   println("Saved project: " + projectName);
+}
+
+boolean loadProject(String projectName){
+  String path = "data/" + projectName + ".json";
+  java.io.File file = new java.io.File(dataPath(projectName + ".json"));
+
+  if (!file.exists()){
+    println("Could not find project: " + projectName);
+    return false;
+  }
+
+  if (userPiece != null){
+    userPiece.stopPlayback();
+  }
+
+  userPiece = loadPiece(path, this);
+
+  if (userPiece.instruments.size() > 0){
+    composeInstrument = userPiece.instruments.get(0);
+  }
+
+  editManager.resetEditor();
+  applyMasterVolumeToUserPiece();
+
+  println("Loaded project: " + projectName);
+  return true;
 }

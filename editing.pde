@@ -1,223 +1,282 @@
 class EditManager {
 
-  ArrayList<String> undoList;
-  ArrayList<String> redoList;
-
-  boolean drag;
-
-  String DraggedItem;
-
-  float dragX;
-  float dragY;
-
-  float snapSpace;
-  float snapX;
-  float snapY;
-
-  float trashX;
-  float trashY;
-  float trashW;
-  float trashH;
-
-  ArrayList<String> placedNames;
-  ArrayList<Float> placedX;
-  ArrayList<Float> placedY;
+  int activeTrack; //Which track is being edited
+  int selectedMeasure; //Which measure has the selected event
+  int selectedEvent; //Index inside the measure event list
+  boolean placeMode; //Place if true, select if false
+  boolean placingRest; //Place rests instead of notes
+  String statusText;
 
   EditManager() {
-
-    undoList = new ArrayList<String>();
-    redoList = new ArrayList<String>();
-
-    drag = false;
-
-    DraggedItem = "";
-
-    dragX = 0;
-    dragY = 0;
-
-    snapSpace = 30;
-
-    snapX = 200;
-    snapY = 200;
-
-    trashX = 500;
-    trashY = 600;
-    trashW = 100;
-    trashH = 50;
-
-    placedNames = new ArrayList<String>();
-    placedX = new ArrayList<Float>();
-    placedY = new ArrayList<Float>();
+    resetEditor();
   }
 
-
-  void ActionAdd(String action) {
-
-    undoList.add(action);
-
-    redoList.clear();
+  void resetEditor(){
+    activeTrack = 0;
+    placeMode = true;
+    placingRest = false;
+    clearSelection();
+    statusText = "Place mode";
   }
 
+  void clearSelection(){
+    selectedMeasure = -1;
+    selectedEvent = -1;
+  }
 
-  String undo() {
-
-    if (undoList.size() > 0) {
-
-      String action = undoList.get(undoList.size() - 1);
-
-      undoList.remove(undoList.size() - 1);
-
-      redoList.add(action);
-
-      return action;
+  boolean hasSelection(){
+    //Makes sure the saved selection still points to a real event
+    if (userPiece == null){
+      return false;
     }
-    return "";
-  }
-
-
-  String redo() {
-
-    if (redoList.size() > 0) {
-
-      String action = redoList.get(redoList.size() - 1);
-
-      redoList.remove(redoList.size() - 1);
-
-      undoList.add(action);
-
-      return action;
+    if (activeTrack < 0 || activeTrack >= userPiece.tracks.size()){
+      return false;
     }
-    return "";
-  }
-
-
-  void HistorySave() {
-
-    String[] history = new String[undoList.size()];
-
-    for (int i = 0; i < undoList.size(); i++) {
-      history[i] = undoList.get(i);
+    if (selectedMeasure < 0 || selectedMeasure >= userPiece.tracks.get(activeTrack).size()){
+      return false;
     }
-    saveStrings("history.txt", history);
+
+    Measure measure = userPiece.getMeasure(activeTrack, selectedMeasure);
+    return selectedEvent >= 0 && selectedEvent < measure.events.size();
   }
 
-
-  void MoveAction(String itemName) {
-    drag = true;
-    DraggedItem = itemName;
-    dragX = mouseX;
-    dragY = mouseY;
-  }
-
-
-  void dragUpdate() {
-
-    if (drag) {
-      dragX = mouseX;
-      dragY = mouseY;
+  MusicEvent selectedMusicEvent(){
+    if (!hasSelection()){
+      return null;
     }
+
+    return userPiece.getMeasure(activeTrack, selectedMeasure).events.get(selectedEvent);
   }
 
-
-  void placeAction() {
-
-    if (!drag) {
+  void selectEvent(int measureID, int eventID){
+    //Selection is stored as measure index + event index
+    if (userPiece == null || activeTrack < 0 || activeTrack >= userPiece.tracks.size()){
+      clearSelection();
+      return;
+    }
+    if (measureID < 0 || measureID >= userPiece.tracks.get(activeTrack).size()){
+      clearSelection();
       return;
     }
 
-    float snappedX = round((dragX - snapX) / snapSpace) * snapSpace + snapX;
+    Measure measure = userPiece.getMeasure(activeTrack, measureID);
 
-    float snappedY = round((dragY - snapY) / snapSpace) * snapSpace + snapY;
-
-    if (dragX > snapX && dragX < width - 150 && dragY > snapY && dragY < height - 120) {
-
-      placedNames.add(DraggedItem);
-      placedX.add(snappedX);
-      placedY.add(snappedY);
-
-      ActionAdd(DraggedItem + " placed");
+    if (eventID < 0 || eventID >= measure.events.size()){
+      clearSelection();
+      return;
     }
 
-    drag = false;
-    DraggedItem = "";
+    selectedMeasure = measureID;
+    selectedEvent = eventID;
+    setStatus("Selected measure " + (measureID+1) + ", event " + (eventID+1));
   }
 
+  void selectNextEvent(int direction){
+    //Used by left/right arrows to move through the event list
+    if (userPiece == null || userPiece.tracks.size() == 0){
+      return;
+    }
 
-  void deleteAction() {
+    keepTrackInRange();
 
-    for (int i = placedNames.size() - 1; i >= 0; i--) {
+    if (!hasSelection()){
+      selectEvent(0, 0);
+      return;
+    }
 
-      float x = placedX.get(i);
-      float y = placedY.get(i);
+    int measureID = selectedMeasure;
+    int eventID = selectedEvent + direction;
 
-      if (x > trashX && x < trashX + trashW && y > trashY && y < trashY + trashH) {
+    while (measureID >= 0 && measureID < userPiece.tracks.get(activeTrack).size()){
+      Measure measure = userPiece.getMeasure(activeTrack, measureID);
 
-        ActionAdd(placedNames.get(i) + " deleted");
+      if (eventID >= 0 && eventID < measure.events.size()){
+        selectEvent(measureID, eventID);
+        return;
+      }
 
-        placedNames.remove(i);
-        placedX.remove(i);
-        placedY.remove(i);
+      measureID += direction;
+
+      if (direction > 0){
+        eventID = 0;
+      }else if (measureID >= 0){
+        eventID = userPiece.getMeasure(activeTrack, measureID).events.size() - 1;
       }
     }
+
+    setStatus("No more events");
   }
 
+  void changeSelectedPitch(int amount){
+    //Pitch only makes sense for notes, not rests
+    MusicEvent event = selectedMusicEvent();
 
-  void drawPlacedItems() {
+    if (!(event instanceof Note)){
+      setStatus("Select a note first");
+      return;
+    }
 
-    fill(255);
+    Note note = (Note) event;
+    note.midiNote = constrain(note.midiNote + amount, minEditorMidi, maxEditorMidi);
+    setStatus("Pitch: " + note.midiNote);
+  }
 
-    for (int i = 0; i < placedNames.size(); i++) {
+  void changeSelectedDuration(float duration){
+    //Use the MusicalPiece edit method so Measure.changeEvent handles the subdivision
+    selectedDuration = duration;
 
-      float x = placedX.get(i);
-      float y = placedY.get(i);
+    MusicEvent event = selectedMusicEvent();
 
-      ellipse(x, y, 20, 15);
-      line(x + 8, y, x + 8, y - 35);
+    if (event == null){
+      setStatus("Duration: " + duration);
+      return;
+    }
+
+    MusicEvent newEvent;
+
+    if (event instanceof Note){
+      Note note = (Note) event;
+      newEvent = new Note(duration, note.midiNote, note.family);
+    }else{
+      newEvent = new Rest(duration);
+    }
+
+    if (userPiece.editEvent(activeTrack, selectedMeasure, selectedEvent, newEvent)){
+      setStatus("Duration changed to " + duration);
+    }else{
+      setStatus("Duration blocked by another note");
     }
   }
 
+  void deleteSelected(){
+    //Deleting means replacing the event with an equal-length rest
+    MusicEvent event = selectedMusicEvent();
 
-  void drawDraggedItem() {
+    if (event == null){
+      return;
+    }
 
-    if (drag) {
-      
-      fill(255);
-      ellipse(dragX, dragY, 20, 15);
-      line(dragX + 8, dragY, dragX + 8, dragY - 35);
+    if (userPiece.editEvent(activeTrack, selectedMeasure, selectedEvent, new Rest(event.duration))){
+      setStatus("Changed to rest");
     }
   }
 
+  void togglePlaceMode(){
+    placeMode = !placeMode;
 
-  void drawTrash() {
+    if (placeMode){
+      setStatus("Place mode");
+    }else{
+      setStatus("Select mode");
+    }
+  }
 
-    if (drag) {
-      stroke(255, 255, 0);
-      strokeWeight(4);
-    } 
-    else {
-      stroke(255);
-      strokeWeight(2);
+  void toggleRestMode(){
+    placingRest = !placingRest;
+
+    if (placingRest){
+      setStatus("Placing rests");
+    }else{
+      setStatus("Placing notes");
+    }
+  }
+
+  void addMeasureToPiece(){
+    if (userPiece == null){
+      return;
     }
 
-    fill(40);
-    rect(trashX, trashY, trashW, trashH, 10);
-
-    rect(trashX - 10, trashY - 12, trashW + 20, 12, 5);
-    fill(255);
-
-    textAlign(CENTER, CENTER);
-    textSize(22);
-    text("TRASH", trashX + trashW/2, trashY + trashH/2);
+    userPiece.addMeasure();
+    setStatus("Added measure " + userPiece.measureCount());
   }
 
+  void addTrackToPiece(Instrument instrument){
+    //MusicalPiece.addInstrument creates the matching measures too
+    if (userPiece == null){
+      return;
+    }
 
-  void display() {
-    drawPlacedItems();
-    drawDraggedItem();
-    drawTrash();
+    userPiece.addInstrument(instrument);
+    activeTrack = userPiece.tracks.size() - 1;
+    clearSelection();
+    syncInstrumentDropdown();
+    setStatus("Added track " + (activeTrack+1));
   }
-  
-  
-  
+
+  void deleteActiveTrack(){
+    //After deleting a track, fix the track number stored inside each measure
+    if (userPiece == null || userPiece.tracks.size() <= 1){
+      setStatus("Cannot delete the last track");
+      return;
+    }
+
+    userPiece.stopPlayback();
+    userPiece.tracks.remove(activeTrack);
+    userPiece.instruments.remove(activeTrack);
+
+    for (int t=0;t<userPiece.tracks.size();t++){
+      for (Measure measure: userPiece.tracks.get(t)){
+        measure.track = t;
+      }
+    }
+
+    keepTrackInRange();
+    clearSelection();
+    composeInstrument = userPiece.instruments.get(activeTrack);
+    syncInstrumentDropdown();
+    setStatus("Deleted track. Active track " + (activeTrack+1));
+  }
+
+  void setActiveTrackInstrument(String instrumentName){
+    //Existing notes need the new instrument too
+    if (userPiece == null || userPiece.tracks.size() == 0){
+      return;
+    }
+
+    keepTrackInRange();
+
+    Instrument newInstrument = createInstrumentByName(instrumentName);
+    userPiece.instruments.set(activeTrack, newInstrument);
+    composeInstrument = newInstrument;
+
+    for (Measure measure: userPiece.tracks.get(activeTrack)){
+      for (MusicEvent event: measure.events){
+        if (event instanceof Note){
+          Note note = (Note) event;
+          note.family = newInstrument;
+        }
+      }
+    }
+
+    applyMasterVolumeToUserPiece();
+    syncInstrumentDropdown();
+    setStatus("Track " + (activeTrack+1) + " instrument: " + newInstrument.name);
+  }
+
+  void changeTrack(int direction){
+    //direction is -1 for previous track, 1 for next track
+    if (userPiece == null || userPiece.tracks.size() == 0){
+      return;
+    }
+
+    activeTrack += direction;
+    keepTrackInRange();
+    clearSelection();
+    syncInstrumentDropdown();
+    setStatus("Track " + (activeTrack+1));
+  }
+
+  void keepTrackInRange(){
+    //Prevents activeTrack from pointing past the end after deleting/loading
+    if (userPiece == null || userPiece.tracks.size() == 0){
+      activeTrack = 0;
+    }else{
+      activeTrack = constrain(activeTrack, 0, userPiece.tracks.size() - 1);
+    }
+  }
+
+  void setStatus(String message){
+    statusText = message;
+    println(message);
+  }
 }
-  
