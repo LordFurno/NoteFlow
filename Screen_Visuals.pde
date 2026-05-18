@@ -240,6 +240,10 @@ void drawCompose(){
 
     //Measure lines for both sets
     drawMeasureLines(y);
+    
+    if (showSavePopup) {
+    drawSavePopup();
+    }
   }
 }
 
@@ -324,6 +328,24 @@ void drawMeasureLines(int y) {
 }
 
 
+void drawSavePopup() {
+
+  fill(0, 180);
+  rect(0, 0, width, height);
+
+  fill(40);
+  stroke(255);
+  strokeWeight(3);
+
+  rect(width/2 - 220, height/2 - 140, 440, 240, 20);
+
+  fill(255);
+
+  textAlign(CENTER);
+  textSize(28);
+
+  text("Enter a name for your project:", width/2, height/2 - 80);
+}
 
 void setGUIVisible(boolean state) {
   BPM.setVisible(state);

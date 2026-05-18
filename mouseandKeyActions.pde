@@ -105,6 +105,8 @@ void updateGUIVisibility() {
   boolean show = (currentScreen == composePage);
 
   BPM.setVisible(show);
+  VolumeSlider.setVisible(show);
+
   UndoButton.setVisible(show);
   RedoButton.setVisible(show);
   NoteKey.setVisible(show);

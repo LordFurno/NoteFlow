@@ -198,3 +198,42 @@ MusicalPiece loadPiece(String path, PApplet app){
 
   return piece;
 }
+
+void loadSavedProjects() {
+
+  savedProjects.clear();
+
+  String[] files = listPaths(dataPath(""));
+
+  if (files == null) return;
+
+  for (String path : files) {
+
+    if (path.endsWith(".json")) {
+
+      String name = path.substring(
+        path.lastIndexOf("/") + 1,
+        path.length() - 5
+      );
+
+      savedProjects.add(name);
+    }
+  }
+}
+
+
+void saveCurrentProject(String projectName) {
+
+  userPiece.title = projectName;
+
+  SavedPiece save = new SavedPiece(
+    "data/" + projectName + ".json",
+    userPiece
+  );
+
+  save.createFile();
+
+  loadSavedProjects();
+
+  println("Saved project: " + projectName);
+}

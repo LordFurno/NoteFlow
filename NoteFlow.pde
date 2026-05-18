@@ -21,6 +21,16 @@ MusicalPiece userPiece;
 Instrument composeInstrument;
 float selectedDuration = 1.0;
 
+// ---- Save Popup ----
+boolean showSavePopup = false;
+String projectNameInput = "";
+boolean confirmSaveChecked = false;
+ArrayList<String> savedProjects = new ArrayList<String>();
+
+// ---- Volume ----
+float masterVolume = 0.8;
+
+
 // ---- Nav bar data ----
 String[] navLabels = {"Features", "Library", "Explore Demo's", "FAQ"};
 int[] navX;       
@@ -55,6 +65,9 @@ void setup() {
   userPiece = new MusicalPiece("My Piece", new KeySignature(true, 0), new TimeSignature(4, 4), 120);
   userPiece.addInstrument(composeInstrument);
   userPiece.addMeasures(3);//adds 3 more measures
+  
+  loadSavedProjects();
+  
   
   //Save/load test
   //SavedPiece sp = new SavedPiece("data/test_save.json", temp);

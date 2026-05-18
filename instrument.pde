@@ -66,6 +66,7 @@ class Instrument{
     PitchData info = getPitchRate(midiNote);
     stopAll(); //Stop all samples, not just the one about to play (prevents overlap when switching between sample files)
     this.samples[info.index].cue(this.sampleStarts[info.index]);
+    this.samples[info.index].amp(masterVolume);
     this.samples[info.index].play(info.rate);
 
   }
