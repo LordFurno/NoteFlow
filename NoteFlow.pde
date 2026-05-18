@@ -34,7 +34,7 @@ int navPad = 6;
 DemoEqualizer demoEqualizer;
 
 void setup() {
-  size(1000, 700);
+  size(1000, 730);
   frameRate(60);
 
   navX = new int[]{headerX, headerX+150, headerX+280, headerX+480};

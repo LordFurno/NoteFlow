@@ -13,40 +13,43 @@
  * Do not rename this tab!
 
  */
+//Global Settings
+int xInitialValueButtons = 100;
+int yInitialValueButtons = 640;
 
 public void createGUI() {
   G4P.messagesEnabled(false);
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
 
-  BPM = new GCustomSlider(this, 26, 10, 120, 40, "grey_blue");
+  BPM = new GCustomSlider(this, xInitialValueButtons, yInitialValueButtons, 120, 40, "grey_blue"); 
   BPM.setLimits(120, 20, 240);
   BPM.setNumberFormat(G4P.INTEGER, 0);
   BPM.setOpaque(false);
   BPM.addEventHandler(this, "BPMSlider");
 
-  UndoButton = new GButton(this, 180, 15, 70, 30);
+  UndoButton = new GButton(this, xInitialValueButtons+154, yInitialValueButtons+5, 70, 30); //Diff = 154
   UndoButton.setText("Undo");
   UndoButton.addEventHandler(this, "UndoClicked");
 
-  RedoButton = new GButton(this, 260, 15, 70, 30);
+  RedoButton = new GButton(this, xInitialValueButtons+234, yInitialValueButtons+5, 70, 30); //Diff = 80
   RedoButton.setText("Redo");
   RedoButton.addEventHandler(this, "RedoClicked");
 
-  NoteKey = new GDropList(this, 350, 15, 100, 80, 3, 10);
-  NoteKey.setItems(loadStrings("noteDurations.txt"), 0);
+  NoteKey = new GDropList(this, xInitialValueButtons+324, yInitialValueButtons+5, 100, 80, 3, 10); //Diff = 90
+  NoteKey.setItems(loadStrings("noteDurations.txt"), 0); 
   NoteKey.addEventHandler(this, "dropList1_click1");
 
-  PlayButton = new GButton(this, 470, 15, 100, 30);
+  PlayButton = new GButton(this, xInitialValueButtons+444, yInitialValueButtons+5, 100, 30); //Diff = 120
   PlayButton.setText("Play/Pause");
   PlayButton.addEventHandler(this, "PlayClicked");
 
-  button1 = new GButton(this, 590, 15, 80, 30);
+  button1 = new GButton(this, xInitialValueButtons+564, yInitialValueButtons+5, 80, 30); //Diff = 120
   button1.setText("Reset");
   button1.setLocalColorScheme(GCScheme.RED_SCHEME);
   button1.addEventHandler(this, "button1_click1");
 
-  button2 = new GButton(this, 680, 15, 80, 30);
+  button2 = new GButton(this, xInitialValueButtons+654, yInitialValueButtons+5, 80, 30); //Diff = 90
   button2.setText("Save");
   button2.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   button2.addEventHandler(this, "button2_click1");
