@@ -26,7 +26,7 @@ int[] navW = {90, 70, 160, 42};
 int[] navScreens; 
 int navY = 50;
 int navBoxH = 28;
-int navPad  = 6;
+int navPad = 6;
 
 // ---- Demo visualizer data ----
 DemoEqualizer demoEqualizer;
