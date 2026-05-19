@@ -60,7 +60,10 @@ void setup() {
   
   //Create blank 4 measure piece in C major, 4/4
   makeBlankUserPiece("My Piece");
+  undoStack.clear();
+  redoStack.clear();
   
+  saveHistoryState();
   loadSavedProjects();
   
   
@@ -157,7 +160,7 @@ void makeBlankUserPiece(String title){
   composeInstrument = createPianoInstrument("Piano");
   userPiece = new MusicalPiece(title, new KeySignature(true, 0), new TimeSignature(4, 4), 120);
   userPiece.addInstrument(composeInstrument);
-  userPiece.addMeasures(3);//adds 3 more measures
+  userPiece.addMeasure(3);//adds 3 more measures
   applyMasterVolumeToUserPiece();
 
   if (editManager != null){

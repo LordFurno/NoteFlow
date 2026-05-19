@@ -170,11 +170,13 @@ public void AddMeasureClicked(GButton source, GEvent event) {
 }
 
 public void UndoClicked(GButton source, GEvent event) {
-  editManager.setStatus("Undo not set up yet");
+  undoAction();
+  editManager.setStatus("Undo");
 }
 
 public void RedoClicked(GButton source, GEvent event) {
-  editManager.setStatus("Redo not set up yet");
+  redoAction();
+  editManager.setStatus("Redo");
 }
 
 public void dropList1_click1(GDropList source, GEvent event) {

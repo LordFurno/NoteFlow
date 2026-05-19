@@ -206,25 +206,35 @@ class MusicalPiece{
     int trackID = tracks.size(); //New index 
     instruments.add(instrument);
     tracks.add(new ArrayList<Measure>());
-    
+  
     int count = max(1, measureCount());
+  
     for (int i=0;i<count;i++){
       addMeasure(trackID, i);
     }
-  }
+  
+    saveHistoryState();
+}
   
   //trackID is the index of which track in the piece
-  //measureID is the index of the measure within a specific track
-  //eventID is the specific note within the measure that is being placed/edited
+//measureID is the index of the measure within a specific track
+//eventID is the specific note within the measure that is being placed/edited
   boolean placeEvent(int trackID, int measureID, int eventID, MusicEvent event){
-    Measure measure = getMeasure(trackID, measureID);
+  Measure measure = getMeasure(trackID, measureID);
     MusicEvent oldEvent = measure.events.get(eventID);
-    
+  
     if (!(oldEvent instanceof Rest)){
       return false;
     }
-    return measure.changeEvent(event, eventID);
-  }
+  
+    boolean result = measure.changeEvent(event, eventID);
+  
+    if (result){
+      saveHistoryState();
+    }
+  
+    return result;
+}
   
   boolean placeEventAtBeat(int trackID, int measureID, float beat, MusicEvent event){
     Measure measure = getMeasure(trackID, measureID);
@@ -379,9 +389,11 @@ class MusicalPiece{
       instrument.stopAll();
     }
   }
-  void addMeasures(int count) {
-  for (int i = 0; i < count; i++) {
-    addMeasure();
+  void addMeasure(int count){ //Add measures for every track
+  for (int t=0;t<tracks.size();t++){
+    addMeasure(t, tracks.get(t).size());
   }
-  }
+
+  saveHistoryState();
+}
 }

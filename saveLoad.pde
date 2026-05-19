@@ -1,3 +1,15 @@
+ArrayList<String> undoStack = new ArrayList<String>();
+ArrayList<String> redoStack = new ArrayList<String>();
+
+String historyPath = "data/History_Storage.txt";
+boolean historyLocked = false;
+
+ArrayList<String> historyStates = new ArrayList<String>();
+
+int historyIndex = -1;
+
+boolean loadingHistoryState = false;
+
 class SavedPiece{
   String saveLocation;
   MusicalPiece piece;
@@ -114,6 +126,9 @@ class SavedPiece{
 
 
 }
+
+
+
 
 MusicalPiece loadPiece(String path, PApplet app){
   JSONObject root = loadJSONObject(path);
@@ -253,6 +268,25 @@ void saveCurrentProject(String projectName) {
   println("Saved project: " + projectName);
 }
 
+void saveHistoryState(){
+
+  if (loadingHistoryState){
+    return;
+  }
+
+  while (historyStates.size() > historyIndex + 1){
+    historyStates.remove(historyStates.size()-1);
+  }
+
+  String path = "data/History_Storage/history_" + historyStates.size() + ".json";
+
+  SavedPiece save = new SavedPiece(path, userPiece);
+  save.createFile();
+
+  historyStates.add(path);
+  historyIndex = historyStates.size()-1;
+}
+
 boolean loadProject(String projectName){
   String path = "data/" + projectName + ".json";
   java.io.File file = new java.io.File(dataPath(projectName + ".json"));
@@ -275,6 +309,47 @@ boolean loadProject(String projectName){
   editManager.resetEditor();
   applyMasterVolumeToUserPiece();
 
+  undoStack.clear();
+  redoStack.clear();
+  
+  saveHistoryState();
+  
   println("Loaded project: " + projectName);
+  
   return true;
+}
+
+void undoAction(){
+
+  if (historyIndex <= 0){
+    return;
+  }
+
+  historyIndex--;
+
+  loadingHistoryState = true;
+
+  userPiece = loadPiece(historyStates.get(historyIndex), this);
+
+  loadingHistoryState = false;
+
+  applyMasterVolumeToUserPiece();
+}
+
+
+void redoAction(){
+
+  if (historyIndex >= historyStates.size()-1){
+    return;
+  }
+
+  historyIndex++;
+
+  loadingHistoryState = true;
+
+  userPiece = loadPiece(historyStates.get(historyIndex), this);
+
+  loadingHistoryState = false;
+
+  applyMasterVolumeToUserPiece();
 }

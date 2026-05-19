@@ -171,15 +171,18 @@ boolean handleComposeClick(){
     event = new Note(selectedDuration, midiNote, instrument);
   }
 
-  boolean placed = userPiece.placeEvent(editManager.activeTrack, measureID, eventID, event);
+  saveHistoryState();
 
+  boolean placed = userPiece.placeEvent(editManager.activeTrack, measureID, eventID,event);
+  
   if (placed){
     editManager.selectEvent(measureID, eventID);
     editManager.setStatus("Placed event");
-  }else{
+  }
+  else{
+    undoStack.remove(undoStack.size()-1);
     editManager.setStatus("Subdivide the rest first");
   }
-
   return true;
 }
 
@@ -230,4 +233,14 @@ void updateGUIVisibility() {
   SaveNameBox.setVisible(show && showSavePopup);
   SaveCheckbox.setVisible(show && showSavePopup);
   ConfirmSaveButton.setVisible(show && showSavePopup);
+}
+
+
+
+void undoButtonPressed(){
+  undoAction();
+}
+
+void redoButtonPressed(){
+  redoAction();
 }
