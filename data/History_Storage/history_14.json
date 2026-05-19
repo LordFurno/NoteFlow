@@ -10,7 +10,7 @@
     "upper": 4,
     "lower": 4
   },
-  "title": "My Piece",
+  "title": "e",
   "keySig": {
     "accidentalCount": 0,
     "sharp": true
@@ -49,12 +49,44 @@
           "type": "rest"
         },
         {
-          "duration": 1,
-          "type": "rest"
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 72
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
         },
         {
-          "duration": 1,
-          "type": "rest"
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 69
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 72
+        },
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 69
         }
       ]
     }

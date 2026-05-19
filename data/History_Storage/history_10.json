@@ -10,12 +10,54 @@
     "upper": 4,
     "lower": 4
   },
-  "title": "My Piece",
+  "title": "hello",
   "keySig": {
     "accidentalCount": 0,
     "sharp": true
   },
   "tracks": [[
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        }
+      ]
+    },
     {
       "accidentals": "",
       "events": [

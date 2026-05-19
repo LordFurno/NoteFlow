@@ -171,33 +171,15 @@
           },
           {
             "duration": 0.5,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 74
+            "type": "rest"
           },
           {
-            "duration": 0.5,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 69
+            "duration": 1,
+            "type": "rest"
           },
           {
-            "duration": 0.5,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 72
-          },
-          {
-            "duration": 0.5,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 67
-          },
-          {
-            "duration": 0.5,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 72
+            "duration": 1,
+            "type": "rest"
           }
         ]
       },
@@ -231,9 +213,7 @@
           },
           {
             "duration": 1,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 71
+            "type": "rest"
           },
           {
             "duration": 1,

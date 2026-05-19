@@ -225,6 +225,7 @@ void updateGUIVisibility() {
   AddTrackButton.setVisible(show);
   DeleteTrackButton.setVisible(show);
   AddMeasureButton.setVisible(show);
+  KeySignatureButton.setVisible(show);
 
   if (!show){
     showSavePopup = false;

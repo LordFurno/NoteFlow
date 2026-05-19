@@ -195,29 +195,6 @@
           },
           {
             "duration": 0.5,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 72
-          }
-        ]
-      },
-      {
-        "accidentals": "",
-        "events": [
-          {
-            "duration": 1,
-            "type": "rest"
-          },
-          {
-            "duration": 1,
-            "type": "rest"
-          },
-          {
-            "duration": 1,
-            "type": "rest"
-          },
-          {
-            "duration": 1,
             "type": "rest"
           }
         ]
@@ -231,9 +208,28 @@
           },
           {
             "duration": 1,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 71
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
           },
           {
             "duration": 1,

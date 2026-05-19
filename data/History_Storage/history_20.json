@@ -1,0 +1,88 @@
+{
+  "instruments": [{
+    "name": "Piano",
+    "pitches": "60",
+    "files": "piano/C4.aiff",
+    "starts": "0.0"
+  }],
+  "tempo": 120,
+  "timeSig": {
+    "upper": 4,
+    "lower": 4
+  },
+  "title": "e",
+  "keySig": {
+    "accidentalCount": 0,
+    "sharp": true
+  },
+  "tracks": [[
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 72
+        },
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 71
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 74
+        },
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 72
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        },
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 69
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 72
+        },
+        {
+          "duration": 2,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 69
+        }
+      ]
+    }
+  ]]
+}

@@ -13,6 +13,8 @@
  * Do not rename this tab!
 
  */
+ 
+ 
 //Global Settings
 int xInitialValueButtons = 100;
 int yInitialValueButtons = 640;
@@ -97,6 +99,11 @@ public void createGUI() {
   AddMeasureButton = new GButton(this, xInitialValueButtons+545, yInitialValueButtons+50, 110, 30);
   AddMeasureButton.setText("Add Measure");
   AddMeasureButton.addEventHandler(this, "AddMeasureClicked");
+
+  KeySignatureButton = new GDropList(this, xInitialValueButtons-100, yInitialValueButtons, 120, 80, 3, 10);
+  KeySignatureButton.setItems(loadStrings("keySignatures.txt"), 2);
+  KeySignatureButton.addEventHandler(this, "UpdateKeySig");
+
 
   // =========================
   // SAVE POPUP CONTROLS
@@ -189,6 +196,19 @@ public void dropList1_click1(GDropList source, GEvent event) {
   }
 }
 
+public void UpdateKeySig(GDropList source, GEvent event){
+  int selected = source.getSelectedIndex();
+  int [] accidentals = {0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,7};
+  boolean sharp = true;
+  if (selected>8){
+     sharp = false;
+  }
+  KeySignature keySig = new KeySignature(sharp, accidentals[selected]);
+  userPiece.keySig = keySig;
+ 
+}
+
+
 public void PlayClicked(GButton source, GEvent event) {
 
   MusicalPiece piece = demoEqualizer.piece;
@@ -253,6 +273,7 @@ GButton RedoButton;
 
 GDropList NoteKey;
 GDropList InstrumentKey;
+GDropList KeySignatureButton;
 
 GLabel Notes;
 

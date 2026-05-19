@@ -231,9 +231,7 @@
           },
           {
             "duration": 1,
-            "instrumentIndex": 1,
-            "type": "note",
-            "midiNote": 71
+            "type": "rest"
           },
           {
             "duration": 1,

@@ -274,6 +274,9 @@ class EditManager {
       activeTrack = constrain(activeTrack, 0, userPiece.tracks.size() - 1);
     }
   }
+  void updateKeySig(KeySignature k){
+    userPiece.keySig = k;
+  }
 
   void setStatus(String message){
     statusText = message;

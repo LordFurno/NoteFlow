@@ -1,6 +1,23 @@
 import processing.sound.*;
 import g4p_controls.*;
 
+/*
+TODO
+Add the ability to chang key signature
+Add the ability to add accidentals to the note
+Draw the key signature plus clef (default to treble)
+Limit the number of measures (so it doesn't go off screen)
+Fix saving/loading
+Fix piano sample (sounds bad)
+Add a button for equalizer visualization of musical piece
+Move demos to compose page
+Indexout of bounds error when placing whole note in last measure (happens when you place whole note that is longer than measure)
+Happens with all overflows
+
+Fix rest drwaings, doesn't space well or look good, the half and whole rest are the same which is wrong
+Add visual for back button on composer screen
+*/
+
 // ---- Available instruments ----
 Instrument piano;
 Instrument violin;
@@ -17,13 +34,13 @@ String[] sharpMajorKeys = {"C", "G", "D", "A", "E", "B", "F#", "C#"};
 String[] flatMajorKeys = {"C", "F", "Bb", "Eb", "Ab", "Db", "Gb", "Cb"};
 
 EditManager editManager;
-MusicalPiece userPiece;
+MusicalPiece userPiece; //What the user edits
 Instrument composeInstrument;
 float selectedDuration = 1.0;
 int minEditorMidi = 48;
 int maxEditorMidi = 84;
 String[] instrumentNames = {"Piano", "Alto sax"};
-boolean syncingInstrumentDropdown = false;
+boolean syncingInstrumentDropdown = true;
 
 // ---- Save Popup ----
 boolean showSavePopup = false;
