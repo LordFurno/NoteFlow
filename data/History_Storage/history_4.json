@@ -1,16 +1,16 @@
 {
   "instruments": [{
-    "name": "Alto sax",
-    "pitches": "60,55,74",
-    "files": "altoSax/C4.aif,altoSax/G3.aif,altoSax/D5.aif",
-    "starts": "0.21,0.4,0.2"
+    "name": "Piano",
+    "pitches": "60",
+    "files": "piano/C4.aiff",
+    "starts": "0.03"
   }],
   "tempo": 120,
   "timeSig": {
     "upper": 4,
     "lower": 4
   },
-  "title": "test",
+  "title": "first project",
   "keySig": {
     "accidentalCount": 0,
     "sharp": true
@@ -21,43 +21,19 @@
       "events": [
         {
           "duration": 1,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 71
-        },
-        {
-          "duration": 0.25,
-          "accidentalModifier": -1,
-          "hasAccidental": true,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 69
-        },
-        {
-          "duration": 0.25,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 71
-        },
-        {
-          "duration": 0.25,
-          "type": "rest"
-        },
-        {
-          "duration": 0.25,
           "type": "rest"
         },
         {
           "duration": 1,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 76
+          "type": "rest"
         },
         {
           "duration": 1,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 67
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
         }
       ]
     },
@@ -66,42 +42,18 @@
       "events": [
         {
           "duration": 1,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 71
-        },
-        {
-          "duration": 0.25,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 69
-        },
-        {
-          "duration": 0.25,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 71
-        },
-        {
-          "duration": 0.25,
-          "type": "rest"
-        },
-        {
-          "duration": 0.25,
           "type": "rest"
         },
         {
           "duration": 1,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 76
-        },
-        {
-          "duration": 0.25,
           "type": "rest"
         },
         {
-          "duration": 0.75,
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
           "type": "rest"
         }
       ]

@@ -1,110 +1,552 @@
 {
-  "instruments": [{
-    "name": "Piano",
-    "pitches": "60",
-    "files": "piano/C4.aiff",
-    "starts": "0.03"
-  }],
+  "instruments": [
+    {
+      "name": "Piano",
+      "pitches": "60",
+      "files": "piano/C4.aiff",
+      "starts": "0.03"
+    },
+    {
+      "name": "Piano",
+      "pitches": "49,57,65,73,81,85",
+      "files": "vscoPiano/Player_dyn2_rr1_014.wav,vscoPiano/Player_dyn2_rr1_018.wav,vscoPiano/Player_dyn2_rr1_022.wav,vscoPiano/Player_dyn2_rr1_026.wav,vscoPiano/Player_dyn2_rr1_030.wav,vscoPiano/Player_dyn2_rr1_032.wav",
+      "starts": "0.0,0.0,0.0,0.0,0.0,0.0"
+    },
+    {
+      "name": "Piano",
+      "pitches": "49,57,65,73,81,85",
+      "files": "vscoPiano/Player_dyn2_rr1_014.wav,vscoPiano/Player_dyn2_rr1_018.wav,vscoPiano/Player_dyn2_rr1_022.wav,vscoPiano/Player_dyn2_rr1_026.wav,vscoPiano/Player_dyn2_rr1_030.wav,vscoPiano/Player_dyn2_rr1_032.wav",
+      "starts": "0.0,0.0,0.0,0.0,0.0,0.0"
+    },
+    {
+      "name": "Piano",
+      "pitches": "49,57,65,73,81,85",
+      "files": "vscoPiano/Player_dyn2_rr1_014.wav,vscoPiano/Player_dyn2_rr1_018.wav,vscoPiano/Player_dyn2_rr1_022.wav,vscoPiano/Player_dyn2_rr1_026.wav,vscoPiano/Player_dyn2_rr1_030.wav,vscoPiano/Player_dyn2_rr1_032.wav",
+      "starts": "0.0,0.0,0.0,0.0,0.0,0.0"
+    }
+  ],
   "tempo": 120,
   "timeSig": {
     "upper": 4,
     "lower": 4
   },
-  "title": "My Project",
+  "title": "first project",
   "keySig": {
     "accidentalCount": 0,
     "sharp": true
   },
-  "tracks": [[
-    {
-      "accidentals": "",
-      "events": [
-        {
-          "duration": 1,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 71
-        },
-        {
-          "duration": 1,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 62
-        },
-        {
-          "duration": 1,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 76
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        }
-      ]
-    },
-    {
-      "accidentals": "",
-      "events": [
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        }
-      ]
-    },
-    {
-      "accidentals": "",
-      "events": [
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        }
-      ]
-    },
-    {
-      "accidentals": "",
-      "events": [
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        }
-      ]
-    }
-  ]]
+  "tracks": [
+    [
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      },
+      {
+        "accidentals": "",
+        "events": [
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          },
+          {
+            "duration": 1,
+            "type": "rest"
+          }
+        ]
+      }
+    ]
+  ]
 }
