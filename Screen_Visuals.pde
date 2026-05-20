@@ -31,6 +31,10 @@ color textColor = color(230, 220, 255);
 
 // Draw Page 
 void drawScreen(){
+  //Stop all playing
+  if (currentScreen != composePage){
+    userPiece.stopPlayback(); //Sholdn't be playing here, only in compose pag
+  }
   if (currentScreen == homePage){
   drawHome();
   } else if (currentScreen == demosPage){

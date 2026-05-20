@@ -5,7 +5,7 @@ import g4p_controls.*;
 TODO
 Add FAQ
 Add feature list
-Fix bug with continuing to play after moving off screen
+
 
 */
 
