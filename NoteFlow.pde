@@ -83,28 +83,7 @@ void setup() {
   saveHistoryState();
   loadSavedProjects();
   
-  
-  //Save/load test
-  //SavedPiece sp = new SavedPiece("data/test_save.json", temp);
-  //sp.createFile();
-  //MusicalPiece loaded = loadPiece("data/test_save.json", this);
-  
-  //println("Loaded " + loaded.title + "\n" + loaded.tempo + " BPM");
-  //ArrayList<Measure> firstTrack = loaded.tracks.get(0);
-  
-  //for (int m=0;m<firstTrack.size();m++){
-  //  Measure measure = firstTrack.get(m);
-  //  print("Measure" + (m+1) + ": ");
-  //  for (MusicEvent event : measure.events){
-  //    if (event instanceof Note){
-  //      print("Note midi = " + ((Note)event).midiNote + " dur = " + event.duration);
-  //    }else{
-  //      print("Rest dur = " + event.duration);
-  //    }
-  //    println();
-  //  }
-  //  println();
-  //}
+
  
 }
 
