@@ -3,7 +3,7 @@ import g4p_controls.*;
 
 /*
 TODO
-Add the ability to chang key signature
+Add the ability to chang key signature + time signature
 Add the ability to add accidentals to the note
 Draw the key signature plus clef (default to treble)
 Limit the number of measures (so it doesn't go off screen)
@@ -39,7 +39,7 @@ Instrument composeInstrument;
 float selectedDuration = 1.0;
 int minEditorMidi = 48;
 int maxEditorMidi = 84;
-String[] instrumentNames = {"Piano", "Alto sax"};
+String[] instrumentNames = {"Piano", "Alto sax", "Strings"};
 boolean syncingInstrumentDropdown = true;
 
 // ---- Save Popup ----
@@ -113,9 +113,16 @@ void draw() {
 }
 
 Instrument createPianoInstrument(String name){
-  int[] pianoPitches = {60};
-  String[] pianoFiles = {"piano/C4.aiff"};
-  float[] pianoStarts = {0.0};
+  int[] pianoPitches = {49, 57, 65, 73, 81, 85};
+  String[] pianoFiles = {
+    "vscoPiano/Player_dyn2_rr1_014.wav",
+    "vscoPiano/Player_dyn2_rr1_018.wav",
+    "vscoPiano/Player_dyn2_rr1_022.wav",
+    "vscoPiano/Player_dyn2_rr1_026.wav",
+    "vscoPiano/Player_dyn2_rr1_030.wav",
+    "vscoPiano/Player_dyn2_rr1_032.wav"
+  };
+  float[] pianoStarts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   return new Instrument(name, pianoPitches, pianoFiles, pianoStarts, this);
 }
 
@@ -126,9 +133,26 @@ Instrument createAltoSaxInstrument(String name){
   return new Instrument(name, saxPitches, saxFiles, saxStarts, this);
 }
 
+Instrument createStringsInstrument(String name){
+  int[] stringPitches = {57, 62, 69, 72, 76, 83};
+  String[] stringFiles = {
+    "strings/VlnEns_susVib_A2_v2.wav",
+    "strings/VlnEns_susVib_D3_v2.wav",
+    "strings/VlnEns_susVib_A3_v2.wav",
+    "strings/VlnEns_susVib_C4_v2.wav",
+    "strings/VlnEns_susVib_E4_v2.wav",
+    "strings/VlnEns_susVib_B4_v2.wav"
+  };
+  float[] stringStarts = {0.05, 0.05, 0.05, 0.05, 0.05, 0.05};
+  return new Instrument(name, stringPitches, stringFiles, stringStarts, this);
+}
+
 Instrument createInstrumentByName(String name){
   if (name.equals("Alto sax")){
     return createAltoSaxInstrument(name);
+  }
+  if (name.equals("Strings")){
+    return createStringsInstrument(name);
   }
 
   return createPianoInstrument("Piano");
@@ -194,7 +218,7 @@ void applyMasterVolumeToUserPiece(){
 
   for (Instrument inst : userPiece.instruments) {
     for (SoundFile s : inst.samples) {
-      s.amp(masterVolume);
+      s.amp(masterVolume * inst.volumeScale);
     }
   }
 }

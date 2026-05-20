@@ -75,7 +75,7 @@ class DemoEqualizer {
 
         if (beatInMeasure >= currentBeat - MUSIC_EPSILON && beatInMeasure < nextBeat - MUSIC_EPSILON){
           //If this event is in beat
-          boostBar(event, beatInMeasure, currentBeat);
+          boostBar(event, measure, beatInMeasure, currentBeat);
         }
 
         currentBeat = nextBeat;
@@ -85,14 +85,15 @@ class DemoEqualizer {
     return false;
   }
 
-  void boostBar(MusicEvent event, float beatInMeasure, float eventBeat){
+  void boostBar(MusicEvent event, Measure measure, float beatInMeasure, float eventBeat){
     if (event instanceof Note){
       Note n = (Note) event;
-      int bar = n.midiNote % bars.length; //What note based on midi
+      int midiNote = measure.resolveEventPitch(n, piece.keySig);
+      int bar = midiNote % bars.length; //What note based on midi
 
       float noteAge = beatInMeasure - eventBeat;
       float strength = 1.0 - (noteAge / max(event.duration, MUSIC_EPSILON)) * 0.45; //Scale strength based on duration
-      float targetHeight = map(n.midiNote, 50, 90, 90, 330) * strength;
+      float targetHeight = map(midiNote, 50, 90, 90, 330) * strength;
 
       bars[bar] = max(bars[bar], targetHeight);
     }

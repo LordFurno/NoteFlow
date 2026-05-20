@@ -3,14 +3,14 @@
     "name": "Piano",
     "pitches": "60",
     "files": "piano/C4.aiff",
-    "starts": "0.0"
+    "starts": "0.03"
   }],
   "tempo": 120,
   "timeSig": {
     "upper": 4,
     "lower": 4
   },
-  "title": "hello",
+  "title": "My Project",
   "keySig": {
     "accidentalCount": 0,
     "sharp": true
@@ -21,19 +21,27 @@
       "events": [
         {
           "duration": 1,
-          "type": "rest"
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 71
         },
         {
           "duration": 1,
-          "type": "rest"
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 62
         },
         {
           "duration": 1,
-          "type": "rest"
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 76
         },
         {
           "duration": 1,
-          "type": "rest"
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 69
         }
       ]
     },

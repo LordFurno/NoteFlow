@@ -16,10 +16,14 @@ class MusicEvent{
 class Note extends MusicEvent{
    int midiNote;
    Instrument family;
+   boolean hasAccidental;
+   int accidentalModifier; //-1 is flat, 0 is natural, 1 is sharp
    Note(float d, int note, Instrument i){
      super(d);
      this.midiNote = note;
      this.family = i;
+     this.hasAccidental = false;
+     this.accidentalModifier = 0;
    }
    
    void play(){
@@ -154,6 +158,15 @@ class Measure{
       return midiNote + withinMeasureAccidentals.get(pitchClass);
     }
     return keySig.modifyPitch(midiNote);
+  }
+
+  int resolveEventPitch(Note note, KeySignature keySig){
+    //Note accidentals override key signature accidentals
+    if (note.hasAccidental){
+      return note.midiNote + note.accidentalModifier;
+    }
+
+    return resolvePitch(note.midiNote, keySig);
   }
 }
 
@@ -315,10 +328,10 @@ class MusicalPiece{
               if (event != null){//Someting there
                 if (event instanceof Note){ //Is a note
                   Note n = (Note) event;
-                  int resolved = measure.resolvePitch(n.midiNote, keySig);
-                  instruments.get(t).playNote(resolved, n.duration);
+                  int resolved = measure.resolveEventPitch(n, keySig);
+                  instruments.get(t).playNote(resolved, n.duration, quarterMs);
                 }else{
-                  instruments.get(t).stopAll(); //Stop playing for this specific track
+                  instruments.get(t).stopForRest(); //Stop playing for this specific track
                 }
               }
 
@@ -390,9 +403,11 @@ class MusicalPiece{
     }
   }
   void addMeasure(int count){ //Add measures for every track
-  for (int t=0;t<tracks.size();t++){
-    addMeasure(t, tracks.get(t).size());
-  }
+    for (int i=0;i<count;i++){
+      for (int t=0;t<tracks.size();t++){
+        addMeasure(t, tracks.get(t).size());
+      }
+    }
 
   saveHistoryState();
 }

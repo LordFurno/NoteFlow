@@ -105,6 +105,10 @@ class SavedPiece{
             eventJSON.setString("type", "note");
             eventJSON.setInt("midiNote", n.midiNote);
             eventJSON.setInt("instrumentIndex", this.piece.instruments.indexOf(n.family));
+            if (n.hasAccidental){
+              eventJSON.setBoolean("hasAccidental", true);
+              eventJSON.setInt("accidentalModifier", n.accidentalModifier);
+            }
             
           }else{
             eventJSON.setString("type", "rest");
@@ -200,7 +204,14 @@ MusicalPiece loadPiece(String path, PApplet app){
         if (eventJSON.getString("type").equals("note")){
           int midiNote = eventJSON.getInt("midiNote");
           int instrIdx = eventJSON.getInt("instrumentIndex");
-          measure.events.add(new Note(duration, midiNote, piece.instruments.get(instrIdx)));
+          Note note = new Note(duration, midiNote, piece.instruments.get(instrIdx));
+
+          if (eventJSON.hasKey("hasAccidental") && eventJSON.getBoolean("hasAccidental")){
+            note.hasAccidental = true;
+            note.accidentalModifier = eventJSON.getInt("accidentalModifier");
+          }
+
+          measure.events.add(note);
           
         }else{
           measure.events.add(new Rest(duration));

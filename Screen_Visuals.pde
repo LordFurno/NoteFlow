@@ -6,6 +6,7 @@ int FAQPage = 3;
 int demoVisualPage = 4;
 int composePage = 5;
 int currentScreen = homePage;
+int visualReturnScreen = demosPage;
 
 //NaviBar x,y vaues for labels(avoids hardcoding)
 int headerX = 315;
@@ -15,11 +16,12 @@ int toolbarH = 90;
 
 //Music Editing Page
 int marginX = 80;
+int notationStartX = 260;
 int startY = 140;
 int staffSpacing = 12;
-int systemGap = 170;
-int numberOfSystems = 3;
-int measuresPerSystem = 4;
+int systemGap = 125;
+int numberOfSystems = 4;
+int measuresPerSystem = 3;
 
 color bgColor = color(8, 6, 15);
 color staffColor = color(190, 140, 255);
@@ -225,6 +227,8 @@ void drawCompose(){
   fill(170, 130, 230);
   text(editorDisplayText(), width / 2, 82);
   noStroke();
+  fill(255, 25);
+  rect(8, 16, 64, 52, 8);
   fill(108,59,170);
   rect(20,40,30,20);
   triangle(10,40, 35,10, 60,40);
@@ -235,6 +239,11 @@ void drawCompose(){
   line(35,10, 35,50);
   ellipse(30,50, 10,5);
   ellipse(10,55, 10,5);
+
+  fill(255);
+  textAlign(LEFT, CENTER);
+  textSize(14);
+  text("Back", 78, 42);
 
   drawExistingMeasureStaves();
 
@@ -276,7 +285,8 @@ void drawDemoVisual(){
   text(demoEqualizer.displayTitle(), width/2, 145);
 
   if (demoEqualizer.draw()){
-    currentScreen = demosPage;
+    currentScreen = visualReturnScreen;
+    updateGUIVisibility();
   }
 }
 
@@ -317,6 +327,8 @@ void drawExistingMeasureStaves(){
 
     drawStaffLines(y, measuresThisSystem);
 
+    drawClefKeyAndTimeSig(y);
+
     drawMeasureLines(y, measuresThisSystem);
   }
 }
@@ -324,7 +336,7 @@ void drawExistingMeasureStaves(){
 void drawStaffLines(int y, int measureCount) {
   stroke(staffColor);
   strokeWeight(2);
-  float endX = marginX + measureWidth() * measureCount;
+  float endX = notationStartX + measureWidth() * measureCount;
 
   for (int i = 0; i < 5; i++) {
     line(marginX,y + i * staffSpacing,endX,y + i * staffSpacing);
@@ -336,10 +348,69 @@ void drawMeasureLines(int y, int numberOfMeasures) {
   strokeWeight(2);
 
   for (int i = 0; i <= numberOfMeasures; i++) {
-    float x = marginX + i * measureWidth();
+    float x = notationStartX + i * measureWidth();
 
     line(x, y, x, y + staffSpacing * 4);
   }
+}
+
+//Just draw a g for treble clef. Too lazy
+//Also draws the time sig
+void drawClefKeyAndTimeSig(int systemY){
+  if (userPiece == null){
+    return;
+  }
+
+  float clefX = marginX + 24;
+  float keyX = marginX + 58;
+  float timeX = notationStartX - 30;
+
+  fill(255, 220);
+  stroke(255, 180);
+  strokeWeight(2);
+  textAlign(CENTER, CENTER);
+  textSize(42);
+  text("G", clefX, systemY + staffSpacing * 2);
+  line(clefX + 11, systemY - staffSpacing, clefX + 11, systemY + staffSpacing * 5);
+
+  drawKeySignatureAccidentals(systemY, userPiece.keySig, keyX);
+  drawTimeSignature(systemY, userPiece.timeSig, timeX);
+}
+
+void drawKeySignatureAccidentals(int systemY, KeySignature keySig, float x){
+  if (keySig == null || keySig.accidentalCount == 0){
+    return;
+  }
+
+  int[] sharpNotes = {77, 72, 79, 74, 69, 76, 71};
+  int[] flatNotes = {71, 76, 69, 74, 67, 72, 65};
+  int[] notes = keySig.sharp ? sharpNotes : flatNotes;
+  String symbol = keySig.sharp ? "#" : "b";
+
+  fill(255, 220);
+  noStroke();
+  textAlign(CENTER, CENTER);
+  textSize(22);
+
+  int count = constrain(keySig.accidentalCount, 0, notes.length);
+
+  for (int i=0;i<count;i++){
+    float y = noteY(notes[i], systemY, 64);
+    text(symbol, x + i * 12, y);
+  }
+}
+
+void drawTimeSignature(int systemY, TimeSignature timeSig, float x){
+  if (timeSig == null){
+    return;
+  }
+
+  fill(255, 230);
+  noStroke();
+  textAlign(CENTER, CENTER);
+  textSize(25);
+  text(timeSig.upper, x, systemY + staffSpacing * 1.1);
+  text(timeSig.lower, x, systemY + staffSpacing * 3.0);
 }
 
 
@@ -395,7 +466,7 @@ void drawUserPiece(){
 
     for (int e=0;e<measure.events.size();e++){
       MusicEvent event = measure.events.get(e);
-      float x = eventX(m, currentBeat);
+      float x = eventX(m, currentBeat, event.duration);
       boolean selected = editManager.selectedMeasure == m && editManager.selectedEvent == e;
 
       if (event instanceof Note){
@@ -421,32 +492,92 @@ void drawSavedNote(Note note, float x, int systemY, boolean selected){
   stroke(255);
   strokeWeight(2);
 
+  float headW = 18;
+  float headH = 12;
+
+  if (note.duration <= 0.25 + MUSIC_EPSILON){
+    headW = 7;
+    headH = 5;
+  }else if (note.duration <= 0.5 + MUSIC_EPSILON){
+    headW = 11;
+    headH = 7;
+  }
+
   if (note.duration <= 1.0 + MUSIC_EPSILON){
     fill(255);
   }else{
     noFill();
   }
 
-  ellipse(x, y, 18, 12);
+  ellipse(x, y, headW, headH);
 
   if (note.duration < 4.0 - MUSIC_EPSILON){
-    drawStemAndFlags(note, x, y);
+    drawStemAndFlags(note, x, y, headW);
   }
 
+  drawNoteAccidental(note, x, y, note.duration);
+
   if (selected){
-    drawEventHighlight(x, y);
+    drawEventHighlight(x, y, note.duration);
   }
 }
 
-void drawStemAndFlags(Note note, float x, float y){
+//Draws the accidentals, natural wil just be an n because I'm lazy
+void drawNoteAccidental(Note note, float x, float y, float duration){
+  if (!note.hasAccidental){
+    return;
+  }
+
+  String symbol = "n";
+  if (note.accidentalModifier > 0){
+    symbol = "#";
+  }else if (note.accidentalModifier < 0){
+    symbol = "b";
+  }
+
+  float accidentalX = x - 22;
+  float accidentalSize = 20;
+  if (duration <= 0.25 + MUSIC_EPSILON){
+    accidentalX = x - 8;
+    accidentalSize = 9;
+  }else if (duration <= 0.5 + MUSIC_EPSILON){
+    accidentalX = x - 13;
+    accidentalSize = 12;
+  }
+
+  fill(255, 220);
+  noStroke();
+  textAlign(CENTER, CENTER);
+  textSize(accidentalSize);
+  text(symbol, accidentalX, y);
+}
+
+void drawStemAndFlags(Note note, float x, float y, float headW){
   boolean stemUp = note.midiNote < 71; //B4, middle line
 
-  float stemX = x - 8;
-  float stemEnd = y + 38;
+  float stemLength = 38;
+  float flagLength = 16;
+  float flagDrop = 9;
+  float flagGap = 8;
+
+  if (note.duration <= 0.25 + MUSIC_EPSILON){
+    stemLength = 20;
+    flagLength = 4;
+    flagDrop = 3;
+    flagGap = 4;
+  }else if (note.duration <= 0.5 + MUSIC_EPSILON){
+    stemLength = 28;
+    flagLength = 8;
+    flagDrop = 5;
+    flagGap = 6;
+  }
+
+  float stemX = x - headW/2.0 + 1;
+  float stemEnd = y + stemLength;
 
   if (stemUp){
-    stemX = x + 8;
-    stemEnd = y - 38;
+    stemX = x + headW/2.0 - 1;
+    stemEnd = y - stemLength;
   }
 
   line(stemX, y, stemX, stemEnd);
@@ -459,18 +590,18 @@ void drawStemAndFlags(Note note, float x, float y){
   }
 
   for (int i=0;i<flags;i++){
-    float flagY = stemEnd + i * 8;
+    float flagY = stemEnd + i * flagGap;
 
     if (stemUp){
-      line(stemX, flagY, stemX + 16, flagY + 9);
+      line(stemX, flagY, stemX + flagLength, flagY + flagDrop);
     }else{
-      flagY = stemEnd - i * 8;
-      line(stemX, flagY, stemX - 16, flagY - 9);
+      flagY = stemEnd - i * flagGap;
+      line(stemX, flagY, stemX - flagLength, flagY - flagDrop);
     }
   }
 }
 
-//Need to fix this, spacing is really weird
+//Draws the main rest shapes for the editor
 void drawSavedRest(float duration, float x, int systemY, boolean selected){
   float y = systemY + staffSpacing * 2;
 
@@ -479,33 +610,51 @@ void drawSavedRest(float duration, float x, int systemY, boolean selected){
   fill(255, 190);
 
   if (duration >= 4.0 - MUSIC_EPSILON){
-    rect(x - 8, y - staffSpacing, 16, 5);
+    float fourthLine = systemY + staffSpacing * 3;
+    rect(x - 9, fourthLine, 18, 6);
   }else if (duration >= 2.0 - MUSIC_EPSILON){
-    rect(x - 8, y, 16, 5);
+    float middleLine = systemY + staffSpacing * 2;
+    rect(x - 9, middleLine - 6, 18, 6);
   }else{
-    noFill();
-    line(x, y - 14, x + 8, y - 5);
-    line(x + 8, y - 5, x - 3, y + 6);
-    line(x - 3, y + 6, x + 8, y + 16);
-
-    if (duration <= 0.5 + MUSIC_EPSILON){
-      line(x + 7, y - 10, x + 17, y - 3);
-    }
     if (duration <= 0.25 + MUSIC_EPSILON){
-      line(x + 4, y - 3, x + 14, y + 4);
+      noFill();
+      line(x - 2, y - 16, x + 2, y + 12);
+      fill(255, 190);
+      ellipse(x + 3, y - 12, 3.5, 3.5);
+      ellipse(x + 3, y - 3, 3.5, 3.5);
+    }else if (duration <= 0.5 + MUSIC_EPSILON){
+      noFill();
+      line(x - 2, y - 14, x + 2, y + 11);
+      fill(255, 190);
+      ellipse(x + 3, y - 12, 4, 4);
+    }else{
+      noFill();
+      line(x - 5, y - 18, x + 5, y - 8);
+      line(x + 5, y - 8, x - 5, y + 2);
+      line(x - 5, y + 2, x + 5, y + 14);
     }
   }
 
   if (selected){
-    drawEventHighlight(x, y);
+    drawEventHighlight(x, y, duration);
   }
 }
 
-void drawEventHighlight(float x, float y){
+void drawEventHighlight(float x, float y, float duration){
+  float w = 36;
+  float h = 36;
+  if (duration <= 0.25 + MUSIC_EPSILON){
+    w = 14;
+    h = 24;
+  }else if (duration <= 0.5 + MUSIC_EPSILON){
+    w = 24;
+    h = 30;
+  }
+
   noFill();
   stroke(255, 230, 80);
   strokeWeight(2);
-  rect(x - 18, y - 18, 36, 36, 6);
+  rect(x - w/2, y - h/2, w, h, 6);
 }
 
 void drawLedgerLines(int midiNote, float x, int staffTop, int anchorMidi){
@@ -561,12 +710,12 @@ int midiFromDiatonicIndex(int index){
 }
 
 float measureWidth(){
-  return (width - marginX * 2) / float(measuresPerSystem);
+  return (width - notationStartX - marginX) / float(measuresPerSystem);
 }
 
 float measureStartX(int measureID){
   int slot = measureID % measuresPerSystem;
-  return marginX + slot * measureWidth();
+  return notationStartX + slot * measureWidth();
 }
 
 int measureSystemY(int measureID){
@@ -574,13 +723,21 @@ int measureSystemY(int measureID){
   return startY + system * systemGap;
 }
 
-float eventX(int measureID, float beat){
-  float usableWidth = measureWidth() - 36;
-  return measureStartX(measureID) + 18 + (beat / userPiece.timeSig.measureDuration()) * usableWidth;
+float eventX(int measureID, float beat, float duration){
+  float pad = 12;
+  if (duration <= 0.25 + MUSIC_EPSILON){
+    pad = 4;
+  }else if (duration <= 0.5 + MUSIC_EPSILON){
+    pad = 8;
+  }
+
+  float usableWidth = measureWidth() - pad*2;
+  float eventBeat = beat + duration/2.0;
+  return measureStartX(measureID) + pad + (eventBeat / userPiece.timeSig.measureDuration()) * usableWidth;
 }
 
 int measureFromMouse(){
-  if (mouseX < marginX || mouseX > width - marginX){
+  if (mouseX < notationStartX || mouseX > width - marginX){
     return -1;
   }
 
@@ -590,7 +747,7 @@ int measureFromMouse(){
     int bottom = y + staffSpacing * 10;
 
     if (mouseY >= top && mouseY <= bottom){
-      int slot = int((mouseX - marginX) / measureWidth());
+      int slot = int((mouseX - notationStartX) / measureWidth());
       slot = constrain(slot, 0, measuresPerSystem - 1);
       return system * measuresPerSystem + slot;
     }

@@ -3,14 +3,14 @@
     "name": "Piano",
     "pitches": "60",
     "files": "piano/C4.aiff",
-    "starts": "0.0"
+    "starts": "0.03"
   }],
   "tempo": 120,
   "timeSig": {
     "upper": 4,
     "lower": 4
   },
-  "title": "e",
+  "title": "My Project",
   "keySig": {
     "accidentalCount": 0,
     "sharp": true
@@ -21,57 +21,33 @@
       "events": [
         {
           "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        }
-      ]
-    },
-    {
-      "accidentals": "",
-      "events": [
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        },
-        {
-          "duration": 1,
-          "type": "rest"
-        }
-      ]
-    },
-    {
-      "accidentals": "",
-      "events": [
-        {
-          "duration": 2,
           "instrumentIndex": 0,
           "type": "note",
-          "midiNote": 67
+          "midiNote": 71
         },
         {
-          "duration": 2,
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 62
+        },
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 76
+        },
+        {
+          "duration": 0.5,
+          "accidentalModifier": -1,
+          "hasAccidental": true,
           "instrumentIndex": 0,
           "type": "note",
           "midiNote": 69
+        },
+        {
+          "duration": 0.5,
+          "type": "rest"
         }
       ]
     },
@@ -79,16 +55,62 @@
       "accidentals": "",
       "events": [
         {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 72
+          "duration": 1,
+          "type": "rest"
         },
         {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 69
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
         }
       ]
     }

@@ -90,6 +90,57 @@ class Demo{
 
 //  return demo1;
 //}
+
+MusicalPiece createDemo1(PApplet app){
+  KeySignature keySig = new KeySignature(true, 1);
+  TimeSignature timeSig = new TimeSignature(4,4);
+  int tempo = 60;
+
+  int[] saxPitches = {60, 55, 74};
+  String[] saxFiles = {"altoSax/C4.aif", "altoSax/G3.aif", "altoSax/D5.aif"};
+  float [] saxStarts = {0.21, 0.4, 0.2};
+  Instrument sax = new Instrument("Alto sax", saxPitches, saxFiles, saxStarts, app);
+
+  MusicalPiece demo1 = new MusicalPiece("Demo 1", keySig, timeSig, tempo);
+  demo1.addInstrument(sax);
+
+  //Do 5 more measures
+  demo1.addMeasure();
+  demo1.addMeasure();
+  demo1.addMeasure();
+  demo1.addMeasure();
+  demo1.addMeasure();
+
+  //Measure 1
+  demo1.placeEvent(0,1,0, new Note(1.0, 55, sax));
+  demo1.placeEvent(0,1,1, new Note(1.0, 67, sax));
+  demo1.placeEvent(0,1,2, new Note(0.5, 69, sax));
+  demo1.placeEvent(0,1,3, new Note(0.5, 71, sax));
+  demo1.placeEvent(0,1,4, new Note(0.5, 73, sax));
+  demo1.placeEvent(0,1,5, new Note(0.5, 75, sax));
+
+  //Measure 2
+  demo1.placeEvent(0,2,0, new Note(1.0, 67, sax));
+  demo1.placeEvent(0,2,3, new Note(0.25, 67, sax));
+  demo1.placeEvent(0,2,4, new Note(0.25, 67, sax));
+  demo1.placeEvent(0,2,5, new Note(0.25, 67, sax));
+  demo1.placeEvent(0,2,6, new Note(0.25, 67, sax));
+
+  //Measure 3
+  demo1.placeEvent(0,3,0, new Note(1.0, 55, sax));
+  demo1.placeEvent(0,3,1, new Note(1.0, 56, sax));
+  demo1.placeEvent(0,3,2, new Note(1.0, 57, sax));
+  demo1.placeEvent(0,3,3, new Note(1.0, 58, sax));
+
+  //Measure 4
+  demo1.placeEvent(0,4,0, new Note(1.0, 74, sax));
+  demo1.placeEvent(0,4,1, new Note(1.0, 75, sax));
+  demo1.placeEvent(0,4,2, new Note(1.0, 76, sax));
+  demo1.placeEvent(0,4,3, new Note(1.0, 77, sax));
+
+  return demo1;
+}
+
 MusicalPiece test(PApplet app){
   KeySignature keySig = new KeySignature(true, 1);
   TimeSignature timeSig = new TimeSignature(4,4);
@@ -97,11 +148,7 @@ MusicalPiece test(PApplet app){
 
 
 
-  int[] pianoPitches = {60};
-  String[] pianoFiles = {"piano/C4.aiff"};
-  float[] pianoStarts = {0.0};
-
-  Instrument sax = new Instrument("Piano", pianoPitches, pianoFiles, pianoStarts, app);
+  Instrument sax = createPianoInstrument("Piano");
 
   MusicalPiece demo2 = new MusicalPiece("Demo 2", keySig, timeSig, tempo);
   demo2.addInstrument(sax);
@@ -293,13 +340,9 @@ MusicalPiece createDemo3(PApplet app){
   TimeSignature timeSig = new TimeSignature(4,4);
   int tempo = 108;
 
-  int[] pianoPitches = {60};
-  String[] pianoFiles = {"piano/C4.aiff"};
-  float[] pianoStarts = {0.0};
-
-  Instrument rootPiano = new Instrument("Piano Root", pianoPitches, pianoFiles, pianoStarts, app);
-  Instrument thirdPiano = new Instrument("Piano Third", pianoPitches, pianoFiles, pianoStarts, app);
-  Instrument fifthPiano = new Instrument("Piano Fifth", pianoPitches, pianoFiles, pianoStarts, app);
+  Instrument rootPiano = createPianoInstrument("Piano Root");
+  Instrument thirdPiano = createPianoInstrument("Piano Third");
+  Instrument fifthPiano = createPianoInstrument("Piano Fifth");
 
   MusicalPiece demo3 = new MusicalPiece("Chord Progression Test", keySig, timeSig, tempo);
   demo3.addInstrument(rootPiano);  //Track 0

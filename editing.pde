@@ -137,6 +137,8 @@ class EditManager {
     if (event instanceof Note){
       Note note = (Note) event;
       newEvent = new Note(duration, note.midiNote, note.family);
+      ((Note)newEvent).hasAccidental = note.hasAccidental;
+      ((Note)newEvent).accidentalModifier = note.accidentalModifier;
     }else{
       newEvent = new Rest(duration);
     }
@@ -186,8 +188,36 @@ class EditManager {
       return;
     }
 
+    if (userPiece.measureCount() >= numberOfSystems * measuresPerSystem){
+      setStatus("Maximum measures reached");
+      return;
+    }
+
     userPiece.addMeasure();
+    saveHistoryState();
     setStatus("Added measure " + userPiece.measureCount());
+  }
+
+  void deleteLastMeasure(){
+    //Remove the last measure from every track
+    if (userPiece == null || userPiece.measureCount() <= 1){
+      setStatus("Cannot delete the last measure");
+      return;
+    }
+
+    userPiece.stopPlayback();
+
+    int removeID = userPiece.measureCount() - 1;
+    for (int t=0;t<userPiece.tracks.size();t++){
+      userPiece.tracks.get(t).remove(removeID);
+    }
+
+    if (selectedMeasure >= userPiece.measureCount()){
+      clearSelection();
+    }
+
+    saveHistoryState();
+    setStatus("Deleted measure " + (removeID+1));
   }
 
   void addTrackToPiece(Instrument instrument){
@@ -275,7 +305,105 @@ class EditManager {
     }
   }
   void updateKeySig(KeySignature k){
+    if (userPiece == null){
+      return;
+    }
+
     userPiece.keySig = k;
+    saveHistoryState();
+    setStatus("Key signature: " + k.getKeyName());
+  }
+
+  boolean pieceIsEmpty(){
+    //Changing meter is only safe before notes are placed
+    if (userPiece == null){
+      return true;
+    }
+
+    for (ArrayList<Measure> track: userPiece.tracks){
+      for (Measure measure: track){
+        for (MusicEvent event: measure.events){
+          if (event instanceof Note){
+            return false;
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
+  void rebuildMeasureRests(Measure measure){
+    //Rebuilds an empty measure for the current time signature
+    measure.timeSig = userPiece.timeSig;
+    measure.events.clear();
+    measure.clearAccidentals();
+
+    for (int i=0;i<measure.timeSig.beatsPerMeasure();i++){
+      measure.events.add(new Rest(measure.timeSig.beatDuration()));
+    }
+  }
+
+  void updateTimeSig(TimeSignature t){
+    if (userPiece == null){
+      return;
+    }
+
+    if (!pieceIsEmpty()){
+      setStatus("Time signature can only change while empty");
+      return;
+    }
+
+    userPiece.stopPlayback();
+    userPiece.timeSig = t;
+
+    for (ArrayList<Measure> track: userPiece.tracks){
+      for (Measure measure: track){
+        rebuildMeasureRests(measure);
+      }
+    }
+
+    clearSelection();
+    saveHistoryState();
+    setStatus("Time signature: " + t.toString());
+  }
+
+  void setSelectedAccidental(int modifier){
+    MusicEvent event = selectedMusicEvent();
+
+    if (!(event instanceof Note)){
+      setStatus("Select a note first");
+      return;
+    }
+
+    Note note = (Note) event;
+    note.hasAccidental = true;
+    note.accidentalModifier = modifier;
+
+    saveHistoryState();
+
+    if (modifier > 0){
+      setStatus("Sharp accidental");
+    }else if (modifier < 0){
+      setStatus("Flat accidental");
+    }else{
+      setStatus("Natural accidental");
+    }
+  }
+
+  void clearSelectedAccidental(){
+    MusicEvent event = selectedMusicEvent();
+
+    if (!(event instanceof Note)){
+      setStatus("Select a note first");
+      return;
+    }
+
+    Note note = (Note) event;
+    note.hasAccidental = false;
+    note.accidentalModifier = 0;
+    saveHistoryState();
+    setStatus("Cleared accidental");
   }
 
   void setStatus(String message){

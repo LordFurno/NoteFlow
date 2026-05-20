@@ -1,0 +1,21 @@
+VSCO 2 Community Edition sample notes
+
+Source:
+https://github.com/sgossner/VSCO-2-CE
+
+License:
+CC0-1.0
+
+Samples used:
+- Keys/Upright Piano/Player_dyn2_rr1_014.wav
+- Keys/Upright Piano/Player_dyn2_rr1_018.wav
+- Keys/Upright Piano/Player_dyn2_rr1_022.wav
+- Keys/Upright Piano/Player_dyn2_rr1_026.wav
+- Keys/Upright Piano/Player_dyn2_rr1_030.wav
+- Keys/Upright Piano/Player_dyn2_rr1_032.wav
+- Strings/Violin Section/susVib/VlnEns_susVib_A2_v2.wav
+- Strings/Violin Section/susVib/VlnEns_susVib_D3_v2.wav
+- Strings/Violin Section/susVib/VlnEns_susVib_A3_v2.wav
+- Strings/Violin Section/susVib/VlnEns_susVib_C4_v2.wav
+- Strings/Violin Section/susVib/VlnEns_susVib_E4_v2.wav
+- Strings/Violin Section/susVib/VlnEns_susVib_B4_v2.wav

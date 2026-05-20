@@ -14,6 +14,9 @@ class Instrument{
   SoundFile[] samples;//Preloaded
   String[] filePaths;
   float[] sampleStarts; //Where each sample starts actually playing
+  int[] samplePlayID;
+  float volumeScale;
+  boolean letNotesRing;
   PApplet app;
   
   Instrument(String n, int[] pitches, String[] files, PApplet p){
@@ -24,15 +27,27 @@ class Instrument{
     this.name = n;
     
     this.app = p;
+    this.volumeScale = 1.0;
+    this.letNotesRing = false;
+    if (this.name.toLowerCase().indexOf("piano") >= 0){
+      this.volumeScale = 0.85;
+      this.letNotesRing = true;
+    }else if (this.name.toLowerCase().indexOf("strings") >= 0 || this.name.toLowerCase().indexOf("violin") >= 0){
+      this.volumeScale = 0.75;
+    }
     this.samplePitches = new int[pitches.length];
     this.filePaths = new String[files.length];
     this.samples = new SoundFile[files.length];
     this.sampleStarts = new float[files.length];
+    this.samplePlayID = new int[files.length];
     
     for (int i=0;i<pitches.length;i++){
       this.samplePitches[i] = pitches[i];
       this.filePaths[i] = files[i];
       this.sampleStarts[i] = starts[i];
+      if (files[i].indexOf("piano/") >= 0 && this.sampleStarts[i] < 0.03){
+        this.sampleStarts[i] = 0.03;
+      }
       this.samples[i] = new SoundFile(this.app, files[i]);
     }
     
@@ -63,17 +78,64 @@ class Instrument{
   }
   
   void playNote(int midiNote, float duration){
+    playNote(midiNote, duration, 60000.0 / bpm);
+  }
+
+  void playNote(int midiNote, float duration, float quarterMs){
     PitchData info = getPitchRate(midiNote);
-    stopAll(); //Stop all samples, not just the one about to play (prevents overlap when switching between sample files)
+    stopAll(); //Stop all samples, not just the one about to play
+
+    this.samplePlayID[info.index]++; //Stops old timers from stopping newer notes
+    int playID = this.samplePlayID[info.index];
     this.samples[info.index].cue(this.sampleStarts[info.index]);
-    this.samples[info.index].amp(masterVolume);
+    this.samples[info.index].amp(masterVolume * this.volumeScale);
     this.samples[info.index].play(info.rate);
 
+    if (letNotesRing){ //Piano specifically gets timed release bc it's really annoying to work with and getting to sound good is hard.
+      stopLater(info.index, playID, noteStopMs(duration, quarterMs));
+    }
+  }
+
+  float noteStopMs(float duration, float quarterMs){ //Vrey short piano notes need a minimum playback time
+    float stopMs = duration * quarterMs;
+
+    if (duration <= 0.25 + MUSIC_EPSILON){
+      stopMs = max(150, stopMs);
+    }else if (duration <= 0.5 + MUSIC_EPSILON){
+      stopMs = max(180, stopMs);
+    }
+
+    return stopMs;
+  }
+
+  void stopLater(final int index, final int playID, final float waitMs){
+    Thread stopThread = new Thread(new Runnable() {
+      public void run() {
+        try{
+          Thread.sleep((long)waitMs);
+        }
+        catch (Exception e){
+        }
+
+        if (samplePlayID[index] == playID){
+          samples[index].stop();
+        }
+      }
+    });
+
+    stopThread.start();
+  }
+
+  void stopForRest(){
+    if (!letNotesRing){
+      stopAll();
+    }
   }
   
   void stopAll(){
-    for (SoundFile s: this.samples){
-      s.stop();
+    for (int i=0;i<this.samples.length;i++){
+      this.samplePlayID[i]++;
+      this.samples[i].stop();
     }
   }
 }

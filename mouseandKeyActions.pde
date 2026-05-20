@@ -46,11 +46,19 @@ void keyPressed(){
     editManager.togglePlaceMode();
   }else if (key == 'r' || key == 'R'){
     editManager.toggleRestMode();
+  }else if (key == 's' || key == 'S'){
+    editManager.setSelectedAccidental(1);
+  }else if (key == 'f' || key == 'F'){
+    editManager.setSelectedAccidental(-1);
+  }else if (key == 'n' || key == 'N'){
+    editManager.setSelectedAccidental(0);
+  }else if (key == 'c' || key == 'C'){
+    editManager.clearSelectedAccidental();
   }
 }
 
 void handleNavClick() {
-  if (mouseX > 10 && mouseX < 60) {
+  if (mouseX > 8 && mouseX < 72 && mouseY > 16 && mouseY < 68) {
       stopActiveDemo();
       currentScreen = homePage;
       updateGUIVisibility();
@@ -72,22 +80,22 @@ void handleNavClick() {
 }
 
 boolean handleDemoCardClick() {
+  if (currentScreen != demosPage){
+    return false;
+  }
+
   for (int i = 0; i < 3; i++) {
     float x = 120 + i * 290;
     float y = 320;
     float w = 200;
     float h = 150;
-  if (currentScreen == demosPage){
+
     if (mouseX >= x && mouseX <= x + w && mouseY >= y && mouseY <= y + h) {
-      if (i == 1) {
-        startDemo2Visual();
-      } else if (i == 2) {
-        startDemo3Visual();
-      }
+      loadDemoIntoComposer(i);
       return true;
     }
   }
-  }
+
   return false;
 }
 
@@ -131,6 +139,10 @@ boolean handleComposeClick(){
     return false;
   }
 
+  if (mouseX >= xInitialValueButtons + 530 && mouseX <= xInitialValueButtons + 890 && mouseY >= yInitialValueButtons - 55 && mouseY <= yInitialValueButtons - 5){
+    return false;
+  }
+
   editManager.keepTrackInRange();
 
   int measureID = measureFromMouse();
@@ -171,8 +183,6 @@ boolean handleComposeClick(){
     event = new Note(selectedDuration, midiNote, instrument);
   }
 
-  saveHistoryState();
-
   boolean placed = userPiece.placeEvent(editManager.activeTrack, measureID, eventID,event);
   
   if (placed){
@@ -180,22 +190,60 @@ boolean handleComposeClick(){
     editManager.setStatus("Placed event");
   }
   else{
-    undoStack.remove(undoStack.size()-1);
-    editManager.setStatus("Subdivide the rest first");
+    editManager.setStatus("Could not place event");
   }
   return true;
 }
 
-void startDemo2Visual() {
-  startDemoVisual(createDemo2(this));
+MusicalPiece createDemoPiece(int demoID){
+  boolean oldLoading = loadingHistoryState;
+  loadingHistoryState = true;
+
+  MusicalPiece piece;
+  if (demoID == 0){
+    piece = createDemo1(this);
+  }else if (demoID == 1){
+    piece = createDemo2(this);
+  }else{
+    piece = createDemo3(this);
+  }
+
+  loadingHistoryState = oldLoading;
+  return piece;
 }
 
-void startDemo3Visual() {
-  startDemoVisual(createDemo3(this));
+void loadDemoIntoComposer(int demoID){
+  stopActiveDemo();
+  if (userPiece != null){
+    userPiece.stopPlayback();
+  }
+
+  userPiece = createDemoPiece(demoID);
+  if (userPiece.instruments.size() > 0){
+    composeInstrument = userPiece.instruments.get(0);
+  }
+
+  editManager.resetEditor();
+  applyMasterVolumeToUserPiece();
+  syncInstrumentDropdown();
+  saveHistoryState();
+  currentScreen = composePage;
+  updateGUIVisibility();
+  editManager.setStatus("Loaded " + userPiece.title);
+}
+
+void startUserPieceVisual(){
+  if (userPiece == null){
+    return;
+  }
+
+  userPiece.stopPlayback();
+  startDemoVisual(userPiece);
 }
 
 void startDemoVisual(MusicalPiece piece) {
   stopActiveDemo();
+  visualReturnScreen = currentScreen;
   demoEqualizer.start(piece);
   currentScreen = demoVisualPage;
   updateGUIVisibility();
@@ -225,7 +273,10 @@ void updateGUIVisibility() {
   AddTrackButton.setVisible(show);
   DeleteTrackButton.setVisible(show);
   AddMeasureButton.setVisible(show);
+  DeleteMeasureButton.setVisible(show);
+  VisualizeButton.setVisible(show);
   KeySignatureButton.setVisible(show);
+  TimeSignatureButton.setVisible(show);
 
   if (!show){
     showSavePopup = false;
@@ -234,14 +285,4 @@ void updateGUIVisibility() {
   SaveNameBox.setVisible(show && showSavePopup);
   SaveCheckbox.setVisible(show && showSavePopup);
   ConfirmSaveButton.setVisible(show && showSavePopup);
-}
-
-
-
-void undoButtonPressed(){
-  undoAction();
-}
-
-void redoButtonPressed(){
-  redoAction();
 }

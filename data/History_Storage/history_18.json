@@ -3,14 +3,14 @@
     "name": "Piano",
     "pitches": "60",
     "files": "piano/C4.aiff",
-    "starts": "0.0"
+    "starts": "0.03"
   }],
   "tempo": 120,
   "timeSig": {
     "upper": 4,
     "lower": 4
   },
-  "title": "e",
+  "title": "test",
   "keySig": {
     "accidentalCount": 0,
     "sharp": true
@@ -21,6 +21,71 @@
       "events": [
         {
           "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 71
+        },
+        {
+          "duration": 0.25,
+          "accidentalModifier": -1,
+          "hasAccidental": true,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 69
+        },
+        {
+          "duration": 0.25,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 71
+        },
+        {
+          "duration": 0.25,
+          "type": "rest"
+        },
+        {
+          "duration": 0.25,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 76
+        },
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 67
+        }
+      ]
+    },
+    {
+      "accidentals": "",
+      "events": [
+        {
+          "duration": 1,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 71
+        },
+        {
+          "duration": 0.25,
+          "type": "rest"
+        },
+        {
+          "duration": 0.25,
+          "instrumentIndex": 0,
+          "type": "note",
+          "midiNote": 71
+        },
+        {
+          "duration": 0.25,
+          "type": "rest"
+        },
+        {
+          "duration": 0.25,
           "type": "rest"
         },
         {
@@ -28,10 +93,8 @@
           "type": "rest"
         },
         {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 71
+          "duration": 1,
+          "type": "rest"
         }
       ]
     },
@@ -39,16 +102,20 @@
       "accidentals": "",
       "events": [
         {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 74
+          "duration": 1,
+          "type": "rest"
         },
         {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 72
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
         }
       ]
     },
@@ -56,33 +123,20 @@
       "accidentals": "",
       "events": [
         {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 67
+          "duration": 1,
+          "type": "rest"
         },
         {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 69
-        }
-      ]
-    },
-    {
-      "accidentals": "",
-      "events": [
-        {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 72
+          "duration": 1,
+          "type": "rest"
         },
         {
-          "duration": 2,
-          "instrumentIndex": 0,
-          "type": "note",
-          "midiNote": 69
+          "duration": 1,
+          "type": "rest"
+        },
+        {
+          "duration": 1,
+          "type": "rest"
         }
       ]
     }

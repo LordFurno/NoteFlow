@@ -18,6 +18,7 @@
 //Global Settings
 int xInitialValueButtons = 100;
 int yInitialValueButtons = 640;
+String[] timeSignatureNames = {"4/4", "3/4", "2/4", "6/8"};
 
 public void createGUI() {
   G4P.messagesEnabled(false);
@@ -100,9 +101,22 @@ public void createGUI() {
   AddMeasureButton.setText("Add Measure");
   AddMeasureButton.addEventHandler(this, "AddMeasureClicked");
 
-  KeySignatureButton = new GDropList(this, xInitialValueButtons-100, yInitialValueButtons, 120, 80, 3, 10);
-  KeySignatureButton.setItems(loadStrings("keySignatures.txt"), 2);
+  DeleteMeasureButton = new GButton(this, xInitialValueButtons+665, yInitialValueButtons+50, 110, 30);
+  DeleteMeasureButton.setText("Del Measure");
+  DeleteMeasureButton.setLocalColorScheme(GCScheme.RED_SCHEME);
+  DeleteMeasureButton.addEventHandler(this, "DeleteMeasureClicked");
+
+  VisualizeButton = new GButton(this, xInitialValueButtons+544, yInitialValueButtons-45, 95, 30);
+  VisualizeButton.setText("Visualize");
+  VisualizeButton.addEventHandler(this, "VisualizeClicked");
+
+  KeySignatureButton = new GDropList(this, xInitialValueButtons+754, yInitialValueButtons-45, 120, 80, 3, 10);
+  KeySignatureButton.setItems(loadStrings("keySignatures.txt"), 0);
   KeySignatureButton.addEventHandler(this, "UpdateKeySig");
+
+  TimeSignatureButton = new GDropList(this, xInitialValueButtons+654, yInitialValueButtons-45, 80, 80, 3, 10);
+  TimeSignatureButton.setItems(timeSignatureNames, 0);
+  TimeSignatureButton.addEventHandler(this, "UpdateTimeSig");
 
 
   // =========================
@@ -176,6 +190,14 @@ public void AddMeasureClicked(GButton source, GEvent event) {
   editManager.addMeasureToPiece();
 }
 
+public void DeleteMeasureClicked(GButton source, GEvent event) {
+  editManager.deleteLastMeasure();
+}
+
+public void VisualizeClicked(GButton source, GEvent event) {
+  startUserPieceVisual();
+}
+
 public void UndoClicked(GButton source, GEvent event) {
   undoAction();
   editManager.setStatus("Undo");
@@ -198,14 +220,40 @@ public void dropList1_click1(GDropList source, GEvent event) {
 
 public void UpdateKeySig(GDropList source, GEvent event){
   int selected = source.getSelectedIndex();
-  int [] accidentals = {0,1,2,3,4,5,6,7,0,1,2,3,4,5,6,7};
-  boolean sharp = true;
-  if (selected>8){
-     sharp = false;
+
+  if (selected < 0){
+    return;
   }
-  KeySignature keySig = new KeySignature(sharp, accidentals[selected]);
-  userPiece.keySig = keySig;
- 
+
+  boolean sharp = selected <= 7;
+  int accidentalCount = selected;
+
+  if (!sharp){
+    accidentalCount = selected - 7;
+  }
+
+  KeySignature keySig = new KeySignature(sharp, accidentalCount);
+  editManager.updateKeySig(keySig);
+}
+
+public void UpdateTimeSig(GDropList source, GEvent event){
+  int selected = source.getSelectedIndex();
+
+  if (selected < 0){
+    return;
+  }
+
+  TimeSignature timeSig = new TimeSignature(4, 4);
+
+  if (selected == 1){
+    timeSig = new TimeSignature(3, 4);
+  }else if (selected == 2){
+    timeSig = new TimeSignature(2, 4);
+  }else if (selected == 3){
+    timeSig = new TimeSignature(6, 8);
+  }
+
+  editManager.updateTimeSig(timeSig);
 }
 
 
@@ -274,6 +322,7 @@ GButton RedoButton;
 GDropList NoteKey;
 GDropList InstrumentKey;
 GDropList KeySignatureButton;
+GDropList TimeSignatureButton;
 
 GLabel Notes;
 
@@ -288,6 +337,8 @@ GButton NextTrackButton;
 GButton AddTrackButton;
 GButton DeleteTrackButton;
 GButton AddMeasureButton;
+GButton DeleteMeasureButton;
+GButton VisualizeButton;
 
 GTextField SaveNameBox;
 GCheckbox SaveCheckbox;
