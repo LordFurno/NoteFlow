@@ -3,19 +3,10 @@ import g4p_controls.*;
 
 /*
 TODO
-Add the ability to chang key signature + time signature
-Add the ability to add accidentals to the note
-Draw the key signature plus clef (default to treble)
-Limit the number of measures (so it doesn't go off screen)
-Fix saving/loading
-Fix piano sample (sounds bad)
-Add a button for equalizer visualization of musical piece
-Move demos to compose page
-Indexout of bounds error when placing whole note in last measure (happens when you place whole note that is longer than measure)
-Happens with all overflows
+Add FAQ
+Add feature list
+Fix bug with continuing to play after moving off screen
 
-Fix rest drwaings, doesn't space well or look good, the half and whole rest are the same which is wrong
-Add visual for back button on composer screen
 */
 
 // ---- Available instruments ----
