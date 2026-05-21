@@ -362,16 +362,8 @@ void undoAction(){
   }
 
   historyIndex--;
-
-  loadingHistoryState = true;
-
-  userPiece = loadPiece(historyStates.get(historyIndex), this);
-
-  loadingHistoryState = false;
-
-  applyMasterVolumeToUserPiece();
+  loadHistoryState(historyStates.get(historyIndex));
 }
-
 
 void redoAction(){
 
@@ -380,12 +372,29 @@ void redoAction(){
   }
 
   historyIndex++;
+  loadHistoryState(historyStates.get(historyIndex));
+}
+
+void loadHistoryState(String path){
+  if (userPiece != null){
+    userPiece.stopPlayback();
+  }
 
   loadingHistoryState = true;
 
-  userPiece = loadPiece(historyStates.get(historyIndex), this);
+  userPiece = loadPiece(path, this);
 
   loadingHistoryState = false;
 
+  if (userPiece.instruments.size() > 0){
+    composeInstrument = userPiece.instruments.get(0);
+  }
+
   applyMasterVolumeToUserPiece();
+
+  if (PlayButton != null){
+    PlayButton.setText("Play/Pause");
+  }
+
+  syncInstrumentDropdown();
 }
