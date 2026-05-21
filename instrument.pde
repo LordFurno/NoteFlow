@@ -1,5 +1,5 @@
 
-class PitchData{ //Have to do this bceause I want to return multiple values and java is annoying
+class PitchData{ //Java won't return two things at once, so this keeps them together
   float rate;
   int index;
   PitchData(float r, int i){
@@ -91,7 +91,7 @@ class Instrument{
     this.samples[info.index].amp(masterVolume * this.volumeScale);
     this.samples[info.index].play(info.rate);
 
-    if (letNotesRing){ //Piano specifically gets timed release bc it's really annoying to work with and getting to sound good is hard.
+    if (letNotesRing){ //Piano notes get a timed release so they don't cut off too harshly
       stopLater(info.index, playID, noteStopMs(duration, quarterMs));
     }
   }

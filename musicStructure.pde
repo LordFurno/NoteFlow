@@ -134,13 +134,14 @@ class Measure{
   }
   
   boolean isFull(){
-    return abs(beatsRemaining()) < MUSIC_EPSILON; //Not exactly 0 because processing is weird
+    return abs(beatsRemaining()) < MUSIC_EPSILON; //Floating point math gets tiny rounding errors
   }
   boolean canAdd(MusicEvent e){
     return restDuration() >= e.duration - MUSIC_EPSILON;
   }
   
   //Call this manually when a user places an accidental on a note in this measure
+  //Rule that accidentals apply all in a measure
   void applyAccidental(int pitchClass, int modifier){
     withinMeasureAccidentals.put(pitchClass, modifier); //Future notes have same accidental
   }
@@ -390,7 +391,7 @@ class MusicalPiece{
   }
 
   void waitForBeats(float beats, float quarterMs){//Wait for these many beats
-    try{ //Need to put this in try except bc java is annoying
+    try{
       Thread.sleep((long)(beats * quarterMs));
     }
       catch (Exception e){

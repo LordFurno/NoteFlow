@@ -8,7 +8,22 @@ int scrollbarMarginRight = 10;
 float imageMoveAmount = 1.5;
 
 VScrollbar featureScrollbar;
+VScrollbar libraryScrollbar;
 PImage featuresImg, FAQImg;
+
+float libraryAddX = 150;
+float libraryAddY = 100;
+float libraryAddW = 220;
+float libraryAddH = 45;
+float libraryRowX = 150;
+float libraryRowY = 165;
+float libraryRowW = 700;
+float libraryRowH = 60;
+float libraryRowGap = 90;
+float libraryDeleteRadius = 14;
+
+boolean showDeleteConfirm = false;
+String pendingDeleteProject = "";
 
 boolean isNavHovered(int i) {
   return mouseX >= navX[i] - navPad && mouseX <= navX[i] + navW[i] + navPad && mouseY >= navY - 45 && mouseY <= navY + 45;
@@ -19,8 +34,21 @@ void mousePressed() {
     return;
   }
 
+  if (showDeleteConfirm){
+    handleDeleteConfirmationClick();
+    return;
+  }
+
   if (handleDemoCardClick()) {
     return;
+  }
+
+  if (currentScreen == libraryPage){
+    libraryScrollbar.startDrag();
+
+    if (libraryScrollbar.dragging){
+      return;
+    }
   }
 
   if (handleLibraryProjectClick()) {
@@ -44,6 +72,9 @@ void mousePressed() {
 void mouseReleased() {
   if (currentScreen == featuresPage || currentScreen == FAQPage){
     featureScrollbar.stopDrag();
+  }
+  if (currentScreen == libraryPage){
+    libraryScrollbar.stopDrag();
   }
 }
 void keyPressed(){
@@ -124,27 +155,44 @@ boolean handleDemoCardClick() {
 }
 
 boolean handleLibraryProjectClick() {
-  float x1 = 150;
-  float x2 = 850;
-  float startY = 135;
-  float buttonH = 65;
-  float gap = 90;
-
   if (currentScreen != libraryPage){
     return false;
   }
 
-  for (int i = 0; i < 6; i++){
-    float y1 = startY + i*gap;
-    float y2 = y1 + buttonH;
+  if (mouseX >= libraryAddX && mouseX <= libraryAddX + libraryAddW && mouseY >= libraryAddY && mouseY <= libraryAddY + libraryAddH){
+    stopActiveDemo();
+    makeBlankUserPiece("My Piece");
+    currentScreen = composePage;
+    updateGUIVisibility();
+    return true;
+  }
+
+  if (mouseY < libraryRowY){
+    return false;
+  }
+
+  float scrollAmount = libraryScrollAmount();
+
+  for (int i=0;i<savedProjects.size();i++){
+    float y1 = libraryRowY + i*libraryRowGap - scrollAmount;
+    float y2 = y1 + libraryRowH;
+
+    if (y2 < libraryRowY || y1 > height){
+      continue;
+    }
+
+    float deleteX = libraryRowX + libraryRowW - 32;
+    float deleteY = y1 + libraryRowH/2;
     
-    if (mouseX >= x1 && mouseX <= x2 && mouseY >= y1 && mouseY <= y2) {
+    if (dist(mouseX, mouseY, deleteX, deleteY) <= libraryDeleteRadius){
+      pendingDeleteProject = savedProjects.get(i);
+      showDeleteConfirm = true;
+      return true;
+    }
+
+    if (mouseX >= libraryRowX && mouseX <= libraryRowX + libraryRowW && mouseY >= y1 && mouseY <= y2) {
       stopActiveDemo();
-      if (i < savedProjects.size()){
-        loadProject(savedProjects.get(i));
-      }else{
-        makeBlankUserPiece("My Piece");
-      }
+      loadProject(savedProjects.get(i));
       currentScreen = composePage;
       updateGUIVisibility();
       return true;
@@ -152,6 +200,28 @@ boolean handleLibraryProjectClick() {
   }
 
   return false;
+}
+
+void handleDeleteConfirmationClick(){
+  float panelX = width/2 - 220;
+  float panelY = height/2 - 110;
+  float cancelX = panelX + 70;
+  float buttonY = panelY + 145;
+  float deleteX = panelX + 245;
+  float buttonW = 125;
+  float buttonH = 38;
+
+  if (mouseX >= cancelX && mouseX <= cancelX + buttonW && mouseY >= buttonY && mouseY <= buttonY + buttonH){
+    showDeleteConfirm = false;
+    pendingDeleteProject = "";
+    return;
+  }
+
+  if (mouseX >= deleteX && mouseX <= deleteX + buttonW && mouseY >= buttonY && mouseY <= buttonY + buttonH){
+    deleteSavedProject(pendingDeleteProject);
+    showDeleteConfirm = false;
+    pendingDeleteProject = "";
+  }
 }
 
 boolean handleComposeClick(){
@@ -305,6 +375,10 @@ void updateGUIVisibility() {
   if (!show){
     showSavePopup = false;
   }
+  if (currentScreen != libraryPage){
+    showDeleteConfirm = false;
+    pendingDeleteProject = "";
+  }
 
   SaveNameBox.setVisible(show && showSavePopup);
   SaveCheckbox.setVisible(show && showSavePopup);
@@ -318,6 +392,7 @@ void setupFeatureScrollImage() {
   scrollbarX = width - scrollbarW - scrollbarMarginRight;
 
   featureScrollbar = new VScrollbar(scrollbarX, scrollbarY, scrollbarW, scrollbarH);
+  libraryScrollbar = new VScrollbar(scrollbarX, scrollbarY, scrollbarW, scrollbarH);
   featuresImg = loadImage("features.png");
   FAQImg = loadImage("FAQPage.png");
 }
@@ -366,7 +441,7 @@ void drawFeatureScrollImage() {
 
   image(currentImg, imgX, toolbarH - scrollAmount);
 
-  //To cover annoying white line
+  //Cover the tiny white edge that shows up on this image
   fill(0);
   noStroke();
   rect(imgX + currentImg.width - 2, toolbarH, 4, height - toolbarH);
@@ -375,6 +450,20 @@ void drawFeatureScrollImage() {
   featureScrollbar.display();
 
   drawNavbarOnTop();
+}
+
+float libraryMaxScroll(){
+  float visibleH = height - libraryRowY - 20;
+  float contentH = savedProjects.size() * libraryRowGap;
+  return max(0, contentH - visibleH);
+}
+
+float libraryScrollAmount(){
+  if (libraryScrollbar == null){
+    return 0;
+  }
+
+  return libraryScrollbar.getScrollAmount(libraryMaxScroll());
 }
 
 void mousePressedFeatureScrollImage() {

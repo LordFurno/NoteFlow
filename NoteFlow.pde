@@ -1,14 +1,6 @@
 import processing.sound.*;
 import g4p_controls.*;
 
-/*
-TODO
-Add FAQ
-Add feature list
-
-
-*/
-
 // ---- Available instruments ----
 Instrument piano;
 Instrument violin;

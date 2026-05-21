@@ -173,49 +173,69 @@ void drawDemos(){
 void drawLibrary(){
   background(0);
 
-  fill(119, 61, 255);
-  rect(-10,-10,1010,80);
+  float maxScroll = libraryMaxScroll();
+  if (maxScroll <= 0 && libraryScrollbar != null){
+    libraryScrollbar.sliderY = libraryScrollbar.y;
+  }
 
-  noStroke();
-  fill(255,25);
-  stroke(255,120);
-  strokeWeight(2);
+  float scrollAmount = libraryScrollAmount();
 
-  noStroke();
-  fill(255);
-  rect(20,40,30,20);
-  triangle(10,40, 35,10, 60,40);
-
-  stroke(5);
-  fill(0);
-  line(15,33, 35,10);
-  line(15,43, 35,20);
-  line(15,33, 15,55);
-  line(35,10, 35,50);
-  ellipse(30,50, 10,5);
-  ellipse(10,55, 10,5);
-
-  strokeWeight(2);
-  textSize(25);
-  fill(255);
-
-  textAlign(LEFT);
-  naviBarText();
-
+  clip(0, libraryRowY, width, height-libraryRowY);
   textAlign(CENTER, CENTER);
 
-  for(int i = 0; i < 6; i++){
-    String projectName = "Empty Project " + (i+1);
-    if (i < savedProjects.size()){
-      projectName = savedProjects.get(i);
+  for(int i=0;i<savedProjects.size();i++){
+    float y = libraryRowY + i*libraryRowGap - scrollAmount;
+    if (y + libraryRowH < libraryRowY || y > height){
+      continue;
     }
 
+    String projectName = savedProjects.get(i);
     fill(255);
-    rect(150, 140 + i*90, 700, 60, 20);
+    noStroke();
+    rect(libraryRowX, y, libraryRowW, libraryRowH, 20);
+
+    float deleteX = libraryRowX + libraryRowW - 32;
+    float deleteY = y + libraryRowH/2;
+
+    fill(190, 40, 60);
+    noStroke();
+    ellipse(deleteX, deleteY, libraryDeleteRadius*2, libraryDeleteRadius*2);
+
+    stroke(255);
+    strokeWeight(3);
+    line(deleteX-6, deleteY-6, deleteX+6, deleteY+6);
+    line(deleteX+6, deleteY-6, deleteX-6, deleteY+6);
 
     fill(0);
+    noStroke();
     textSize(30);
-    text(projectName, 500, 170 + i*90);
+    text(projectName, libraryRowX + libraryRowW/2 - 20, y + libraryRowH/2);
+  }
+  noClip();
+
+  if (libraryScrollbar != null){
+    libraryScrollbar.update();
+    libraryScrollbar.display();
+  }
+
+  fill(255);
+  noStroke();
+  rect(libraryAddX, libraryAddY, libraryAddW, libraryAddH, 15);
+
+  stroke(0);
+  strokeWeight(4);
+  line(libraryAddX+28, libraryAddY+14, libraryAddX+28, libraryAddY+31);
+  line(libraryAddX+19, libraryAddY+22, libraryAddX+37, libraryAddY+22);
+
+  fill(0);
+  noStroke();
+  textSize(24);
+  text("Add Project", libraryAddX+125, libraryAddY+23);
+
+  drawNavbarOnTop();
+
+  if (showDeleteConfirm){
+    drawDeleteConfirmPopup();
   }
 }
 void drawFAQ(){
@@ -369,7 +389,7 @@ void drawMeasureLines(int y, int numberOfMeasures) {
   }
 }
 
-//Just draw a g for treble clef. Too lazy
+//Simple treble clef marker for now
 //Also draws the time sig
 void drawClefKeyAndTimeSig(int systemY){
   if (userPiece == null){
@@ -451,6 +471,51 @@ void drawSavePopup() {
   textAlign(LEFT, CENTER);
   textSize(18);
   text("Confirm Save", 385, 374);
+}
+
+void drawDeleteConfirmPopup(){
+  float panelX = width/2 - 220;
+  float panelY = height/2 - 110;
+  float cancelX = panelX + 70;
+  float buttonY = panelY + 145;
+  float deleteX = panelX + 245;
+  float buttonW = 125;
+  float buttonH = 38;
+
+  fill(0, 180);
+  noStroke();
+  rect(0, 0, width, height);
+
+  fill(40);
+  stroke(255);
+  strokeWeight(3);
+  rect(panelX, panelY, 440, 220, 20);
+
+  fill(255);
+  noStroke();
+  textAlign(CENTER, CENTER);
+  textSize(28);
+  text("Delete project?", width/2, panelY + 52);
+
+  textSize(18);
+  text(pendingDeleteProject, width/2, panelY + 92);
+
+  fill(255);
+  stroke(255);
+  strokeWeight(2);
+  rect(cancelX, buttonY, buttonW, buttonH, 12);
+
+  fill(190, 40, 60);
+  stroke(255);
+  rect(deleteX, buttonY, buttonW, buttonH, 12);
+
+  fill(0);
+  noStroke();
+  textSize(18);
+  text("Cancel", cancelX + buttonW/2, buttonY + buttonH/2);
+
+  fill(255);
+  text("Delete", deleteX + buttonW/2, buttonY + buttonH/2);
 }
 
 void drawToolbarLabels(){
@@ -551,7 +616,7 @@ void drawSavedNote(Note note, float x, int systemY, boolean selected){
   }
 }
 
-//Draws the accidentals, natural wil just be an n because I'm lazy
+//Draws accidentals. Natural is shown as n so it stays easy to read.
 void drawNoteAccidental(Note note, float x, float y, float duration){
   if (!note.hasAccidental){
     return;

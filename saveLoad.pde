@@ -158,7 +158,7 @@ MusicalPiece loadPiece(String path, PApplet app){
     int[] pitches = new int[pitchStrings.length];
     
     for (int j=0;j<pitchStrings.length;j++){
-      pitches[j] = int(pitchStrings[j].trim()); //.trim() removes any weird errors by removint whitespace
+      pitches[j] = int(pitchStrings[j].trim()); //Trim first so extra spaces don't break parsing
     }
 
     String[] startStrings = instrJSON.getString("starts").split(",");
@@ -277,6 +277,31 @@ void saveCurrentProject(String projectName) {
   loadSavedProjects();
 
   println("Saved project: " + projectName);
+}
+
+boolean deleteSavedProject(String projectName){
+  projectName = cleanProjectName(projectName);
+  if (projectName.equals("")){
+    return false;
+  }
+
+  java.io.File file = new java.io.File(dataPath(projectName + ".json"));
+  if (!file.exists()){
+    println("Could not find project: " + projectName);
+    loadSavedProjects();
+    return false;
+  }
+
+  boolean deleted = file.delete();
+  loadSavedProjects();
+
+  if (deleted){
+    println("Deleted project: " + projectName);
+  }else{
+    println("Could not delete project: " + projectName);
+  }
+
+  return deleted;
 }
 
 void saveHistoryState(){

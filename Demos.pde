@@ -54,7 +54,7 @@ class Demo{
 //  demo1.addInstrument(sax);
   
 //  //Do 3 measures
-//  demo1.addMeasure(); //One empty measure so audio doesn't get messed up weirdly
+//  demo1.addMeasure(); //One empty measure keeps playback from drifting around
 //  demo1.addMeasure();
 //  demo1.addMeasure();
 //  demo1.addMeasure();
