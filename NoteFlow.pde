@@ -60,11 +60,12 @@ void setup() {
   frameRate(60);
 
   navX = new int[]{headerX, headerX+150, headerX+280, headerX+480};
-  navScreens = new int[]{demosPage, libraryPage, demosPage, homePage};
+  navScreens = new int[]{featuresPage, libraryPage, demosPage, FAQPage};
   demoEqualizer = new DemoEqualizer();
   editManager = new EditManager();
   
   createGUI();
+  setupFeatureScrollImage();
   
   //Create blank 4 measure piece in C major, 4/4
   makeBlankUserPiece("My Piece");

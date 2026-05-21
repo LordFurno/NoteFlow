@@ -5,6 +5,7 @@ int libraryPage = 2;
 int FAQPage = 3;
 int demoVisualPage = 4;
 int composePage = 5;
+int featuresPage = 6;
 int currentScreen = homePage;
 int visualReturnScreen = demosPage;
 
@@ -29,25 +30,32 @@ color accentPurple = color(140, 70, 255);
 color textColor = color(230, 220, 255);
 
 
-// Draw Page 
 void drawScreen(){
-  //Stop all playing
   if (currentScreen != composePage){
-    userPiece.stopPlayback(); //Sholdn't be playing here, only in compose pag
+    userPiece.stopPlayback();
   }
+
   if (currentScreen == homePage){
-  drawHome();
+    drawHome();
+
   } else if (currentScreen == demosPage){
-  drawDemos();
-  } else if(currentScreen == libraryPage){
-  drawLibrary();
-  } else if(currentScreen == demoVisualPage){
-  drawDemoVisual();
-  }else if(currentScreen == composePage){
-  drawCompose();
-  }//else if (currentScreen == FAQPage){
-  //drawFAQ();
-  //} 
+    drawDemos();
+
+  } else if (currentScreen == libraryPage){
+    drawLibrary();
+
+  } else if (currentScreen == FAQPage){
+    drawFeatureScrollImage();
+
+  } else if (currentScreen == demoVisualPage){
+    drawDemoVisual();
+
+  } else if (currentScreen == composePage){
+    drawCompose();
+
+  } else if (currentScreen == featuresPage){
+    drawFeatureScrollImage();
+  } 
 }
 
 //HOMEPAGE
@@ -211,8 +219,10 @@ void drawLibrary(){
   }
 }
 void drawFAQ(){
-
-
+  background(0);
+  fill(0);
+  noStroke();
+  
 }
 void drawCompose(){
   background(bgColor);

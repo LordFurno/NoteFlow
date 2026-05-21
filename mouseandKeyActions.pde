@@ -1,3 +1,15 @@
+//Global Settings
+int scrollbarW = 16;
+int scrollbarH;
+int scrollbarX;
+int scrollbarY = 0;
+
+int scrollbarMarginRight = 10;
+float imageMoveAmount = 1.5;
+
+VScrollbar featureScrollbar;
+PImage featuresImg, FAQImg;
+
 boolean isNavHovered(int i) {
   return mouseX >= navX[i] - navPad && mouseX <= navX[i] + navW[i] + navPad && mouseY >= navY - 45 && mouseY <= navY + 45;
 }
@@ -19,9 +31,21 @@ void mousePressed() {
     return;
   }
 
+  if (currentScreen == featuresPage || currentScreen == FAQPage){
+    featureScrollbar.startDrag();
+
+    if (featureScrollbar.dragging){
+      return;
+    }
+  }
+
   handleNavClick();
 }
-
+void mouseReleased() {
+  if (currentScreen == featuresPage || currentScreen == FAQPage){
+    featureScrollbar.stopDrag();
+  }
+}
 void keyPressed(){
   if (currentScreen != composePage || showSavePopup){
     return;
@@ -59,15 +83,15 @@ void keyPressed(){
 
 void handleNavClick() {
   if (mouseX > 8 && mouseX < 72 && mouseY > 16 && mouseY < 68) {
-      stopActiveDemo();
-      currentScreen = homePage;
-      updateGUIVisibility();
-      return;
-    }
+    stopActiveDemo();
+    currentScreen = homePage;
+    updateGUIVisibility();
+    return;
+  }
     
   if (currentScreen != composePage){
-    if (mouseY > 60) return;
-  
+    if (mouseY > 80) return;
+
     for (int i = 0; i < navLabels.length; i++) {
       if (isNavHovered(i)) {
         stopActiveDemo();
@@ -285,4 +309,137 @@ void updateGUIVisibility() {
   SaveNameBox.setVisible(show && showSavePopup);
   SaveCheckbox.setVisible(show && showSavePopup);
   ConfirmSaveButton.setVisible(show && showSavePopup);
+}
+void setupFeatureScrollImage() {
+  scrollbarY = toolbarH;
+  scrollbarH = height - toolbarH;
+
+  scrollbarX = width - scrollbarW - scrollbarMarginRight;
+
+  featureScrollbar = new VScrollbar(scrollbarX, scrollbarY, scrollbarW, scrollbarH);
+  featuresImg = loadImage("features.png");
+  FAQImg = loadImage("FAQPage.png");
+}
+void drawNavbarOnTop() {
+  fill(119, 61, 255);
+  noStroke();
+  rect(-10, -10, 1010, 80);
+
+  fill(255);
+  rect(20, 40, 30, 20);
+  triangle(10, 40, 35, 10, 60, 40);
+
+  stroke(5);
+  fill(0);
+  line(15, 33, 35, 10);
+  line(15, 43, 35, 20);
+  line(15, 33, 15, 55);
+  line(35, 10, 35, 50);
+  ellipse(30, 50, 10, 5);
+  ellipse(10, 55, 10, 5);
+
+  strokeWeight(2);
+  textSize(25);
+  fill(255);
+  textAlign(LEFT);
+  naviBarText();
+}
+void drawFeatureScrollImage() {
+  background(0);
+
+  // Pick which image to show
+  PImage currentImg;
+
+  if (currentScreen == FAQPage) {
+    currentImg = FAQImg;
+  } else {
+    currentImg = featuresImg;
+  }
+
+  // Calculate scroll amount based on the current image
+  float maxScroll = max(0, currentImg.height - (height - toolbarH));
+  float scrollAmount = featureScrollbar.getScrollAmount(maxScroll);
+
+  // Center the current image
+  float imgX = width/2 - currentImg.width/2;
+
+  image(currentImg, imgX, toolbarH - scrollAmount);
+
+  //To cover annoying white line
+  fill(0);
+  noStroke();
+  rect(imgX + currentImg.width - 2, toolbarH, 4, height - toolbarH);
+
+  featureScrollbar.update();
+  featureScrollbar.display();
+
+  drawNavbarOnTop();
+}
+
+void mousePressedFeatureScrollImage() {
+  featureScrollbar.startDrag();
+}
+
+
+void mouseReleasedFeatureScrollImage() {
+  featureScrollbar.stopDrag();
+}
+
+
+//Scrollbar Class 
+class VScrollbar {
+  //Methods
+  float x, y;
+  int w, h;
+  float sliderY;
+  int sliderH = 30;
+
+  boolean dragging = false;
+  //Constructor
+  VScrollbar(float tempX, float tempY, int tempW, int tempH) {
+    x = tempX;
+    y = tempY;
+    w = tempW;
+    h = tempH;
+
+    sliderY = y + h/2 - sliderH/2;
+  }
+  //Fields
+  void update() {
+    if (dragging) {
+      sliderY = mouseY - sliderH/2;
+      sliderY = constrain(sliderY, y, y + h - sliderH);
+    }
+  }
+
+  void display() {
+    noStroke();
+
+    fill(204);
+    rect(x, y, w, h);
+
+    fill(122);
+    rect(x, sliderY, w, sliderH);
+  }
+
+  void startDrag() {
+    if (mouseOverSlider()) {
+      dragging = true;
+    }
+  }
+
+  void stopDrag() {
+    dragging = false;
+  }
+
+  boolean mouseOverSlider() {
+    return mouseX > x && mouseX < x + w && mouseY > sliderY && mouseY < sliderY + sliderH;
+  }
+
+  float getPos() {
+    return map(sliderY, y, y + h - sliderH, 0, height);
+  }
+  float getScrollAmount(float maxScroll) {
+  return map(sliderY, y, y + h - sliderH, 0, maxScroll);
+}
 }
