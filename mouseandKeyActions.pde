@@ -309,6 +309,7 @@ void updateGUIVisibility() {
   SaveNameBox.setVisible(show && showSavePopup);
   SaveCheckbox.setVisible(show && showSavePopup);
   ConfirmSaveButton.setVisible(show && showSavePopup);
+  CloseSaveButton.setVisible(show && showSavePopup);
 }
 void setupFeatureScrollImage() {
   scrollbarY = toolbarH;

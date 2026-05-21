@@ -5,7 +5,6 @@ int libraryPage = 2;
 int FAQPage = 3;
 int demoVisualPage = 4;
 int composePage = 5;
-int featuresPage = 6;
 int currentScreen = homePage;
 int visualReturnScreen = demosPage;
 
@@ -30,32 +29,25 @@ color accentPurple = color(140, 70, 255);
 color textColor = color(230, 220, 255);
 
 
+// Draw Page 
 void drawScreen(){
-  if (userPiece != null && currentScreen != composePage && currentScreen != demoVisualPage){
-    userPiece.stopPlayback();
+  //Stop all playing
+  if (currentScreen != composePage || currentScreen != ){
+    userPiece.stopPlayback(); //Sholdn't be playing here, only in compose pag
   }
-
   if (currentScreen == homePage){
-    drawHome();
-
+  drawHome();
   } else if (currentScreen == demosPage){
-    drawDemos();
-
-  } else if (currentScreen == libraryPage){
-    drawLibrary();
-
-  } else if (currentScreen == FAQPage){
-    drawFeatureScrollImage();
-
-  } else if (currentScreen == demoVisualPage){
-    drawDemoVisual();
-
-  } else if (currentScreen == composePage){
-    drawCompose();
-
-  } else if (currentScreen == featuresPage){
-    drawFeatureScrollImage();
-  } 
+  drawDemos();
+  } else if(currentScreen == libraryPage){
+  drawLibrary();
+  } else if(currentScreen == demoVisualPage){
+  drawDemoVisual();
+  }else if(currentScreen == composePage){
+  drawCompose();
+  }//else if (currentScreen == FAQPage){
+  //drawFAQ();
+  //} 
 }
 
 //HOMEPAGE
@@ -219,10 +211,8 @@ void drawLibrary(){
   }
 }
 void drawFAQ(){
-  background(0);
-  fill(0);
-  noStroke();
-  
+
+
 }
 void drawCompose(){
   background(bgColor);
@@ -262,7 +252,6 @@ void drawCompose(){
   drawExistingMeasureStaves();
 
   drawUserPiece();
-  drawToolbarLabels();
 
   if (showSavePopup) {
     drawSavePopup();
@@ -446,20 +435,6 @@ void drawSavePopup() {
   textSize(28);
 
   text("Enter a name for your project:", width/2, height/2 - 80);
-
-  fill(255, 230, 90);
-  textAlign(LEFT, CENTER);
-  textSize(18);
-  text("Confirm Save", 385, 374);
-}
-
-void drawToolbarLabels(){
-  fill(textColor);
-  noStroke();
-  textAlign(RIGHT, CENTER);
-  textSize(14);
-  text("Tempo", xInitialValueButtons - 10, yInitialValueButtons + 20);
-  text("Volume", xInitialValueButtons - 10, yInitialValueButtons + 65);
 }
 
 String editorDisplayText(){

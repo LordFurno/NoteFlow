@@ -128,13 +128,19 @@ public void createGUI() {
   SaveNameBox.setVisible(false);
 
   SaveCheckbox = new GCheckbox(this, 350, 360, 280, 30);
-  SaveCheckbox.setText("Confirm Save");
+  SaveCheckbox.setText("");
   SaveCheckbox.setVisible(false);
 
   ConfirmSaveButton = new GButton(this, 420, 420, 150, 40);
   ConfirmSaveButton.setText("Save Project");
   ConfirmSaveButton.setVisible(false);
   ConfirmSaveButton.addEventHandler(this, "ConfirmSaveClicked");
+
+  CloseSaveButton = new GButton(this, 675, 235, 35, 30);
+  CloseSaveButton.setText("X");
+  CloseSaveButton.setLocalColorScheme(GCScheme.RED_SCHEME);
+  CloseSaveButton.setVisible(false);
+  CloseSaveButton.addEventHandler(this, "CloseSaveClicked");
 
   updateGUIVisibility();
 }
@@ -311,6 +317,13 @@ public void ConfirmSaveClicked(GButton source, GEvent event) {
   updateGUIVisibility();
 }
 
+public void CloseSaveClicked(GButton source, GEvent event) {
+  showSavePopup = false;
+  SaveNameBox.setText("");
+  SaveCheckbox.setSelected(false);
+  updateGUIVisibility();
+}
+
 /* ================= VARIABLES ================= */
 
 GCustomSlider BPM;
@@ -343,3 +356,4 @@ GButton VisualizeButton;
 GTextField SaveNameBox;
 GCheckbox SaveCheckbox;
 GButton ConfirmSaveButton;
+GButton CloseSaveButton;
