@@ -253,7 +253,7 @@ MusicalPiece createDemo3(PApplet app){
   Instrument thirdPiano = createPianoInstrument("Piano Third");
   Instrument fifthPiano = createPianoInstrument("Piano Fifth");
 
-  MusicalPiece demo3 = new MusicalPiece("Chord Progression Test", keySig, timeSig, tempo);
+  MusicalPiece demo3 = new MusicalPiece("Demo3", keySig, timeSig, tempo);
   demo3.addInstrument(rootPiano);  //Track 0
   demo3.addInstrument(thirdPiano); //Track 1
   demo3.addInstrument(fifthPiano); //Track 2

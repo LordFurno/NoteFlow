@@ -157,7 +157,7 @@ void drawDemos(){
   textSize(35);
   text("Try out our default demo's to get accustomed to our software!", width/2, 200);
 
-  String[] demoNames = {"Demo 1", "Demo 2", "Chord Test"};
+  String[] demoNames = {"Demo 1", "Demo 2", "Demo 3"};
   for(int i = 0; i < 3; i++){
     fill(255);
     rect(120 + i*290, 320, 200, 150, 25);
