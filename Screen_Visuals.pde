@@ -24,12 +24,13 @@ int systemGap = 125;
 int numberOfSystems = 4;
 int measuresPerSystem = 3;
 
+//Global Colours
 color bgColor = color(8, 6, 15);
 color staffColor = color(190, 140, 255);
 color accentPurple = color(140, 70, 255);
 color textColor = color(230, 220, 255);
 
-
+//Displaying current page based on current screen and what page user selects
 void drawScreen(){
   if (userPiece != null && currentScreen != composePage && currentScreen != demoVisualPage){
     userPiece.stopPlayback();
@@ -61,19 +62,19 @@ void drawScreen(){
 //HOMEPAGE
 void drawHome(){
   background(0);
-  drawArt();
+  drawArt(); //Draws background art design
   textSize(100);
   fill(255);
   textAlign(LEFT);
-  text("NoteFlow", 40,240);
+  text("NoteFlow", 40,240); //Draws title
   
-  fill(119, 61, 255);
-  rect(-10,-10,1010,80);
+  fill(119, 61, 255); //Colour of navbar
+  rect(-10,-10,1010,80); //Draw navbar
   
   fill(255);
   textSize(45);
   
-  text("Compose without limits.", 500,350);
+  text("Compose without limits.", 500,350); //Draws slogan
   
   noStroke();
   fill(255,25);
@@ -85,7 +86,8 @@ void drawHome(){
   //rect(290,0,170,70,15);
   //rect(460,0,170,70,15);
   //rect(630,0,300,7,15);
-
+  
+  //Logo
   noStroke();
   fill(255);
   rect(20,40,30,20);
@@ -104,7 +106,7 @@ void drawHome(){
   textSize(25);
   fill(255);
 
-  naviBarText();
+  naviBarText(); 
 }
 
 
@@ -120,7 +122,6 @@ void drawHome(){
 */
 
 //TAB 2
-
 void drawDemos(){
   background(0);
 
@@ -158,28 +159,29 @@ void drawDemos(){
   text("Try out our default demo's to get accustomed to our software!", width/2, 200);
 
   String[] demoNames = {"Demo 1", "Demo 2", "Demo 3"};
-  for(int i = 0; i < 3; i++){
-    fill(255);
-    rect(120 + i*290, 320, 200, 150, 25);
-
-    fill(0);
+  for(int i = 0; i < 3; i++){             //Loops through ecah demo caard
+    fill(255);                            //Sets demo card colour to white
+    rect(120 + i*290, 320, 200, 150, 25); 
+  
+    fill(0);                              //Sets text to black
     textSize(30);
-    text(demoNames[i], 220 + i*290, 405);
+    text(demoNames[i], 220 + i*290, 405); //Draws the demo name inside the card
   }
 }
 
 //TAB 3
-
 void drawLibrary(){
   background(0);
-
+  
+  //Resets the scrollbar if the library does not need scrolling
   float maxScroll = libraryMaxScroll();
   if (maxScroll <= 0 && libraryScrollbar != null){
     libraryScrollbar.sliderY = libraryScrollbar.y;
   }
-
+  
   float scrollAmount = libraryScrollAmount();
-
+  
+  //Draws only the visible saved project rows inside the scrollable library area
   clip(0, libraryRowY, width, height-libraryRowY);
   textAlign(CENTER, CENTER);
 
@@ -193,7 +195,8 @@ void drawLibrary(){
     fill(255);
     noStroke();
     rect(libraryRowX, y, libraryRowW, libraryRowH, 20);
-
+    
+    //Draws the delete button for each project row
     float deleteX = libraryRowX + libraryRowW - 32;
     float deleteY = y + libraryRowH/2;
 
@@ -212,12 +215,12 @@ void drawLibrary(){
     text(projectName, libraryRowX + libraryRowW/2 - 20, y + libraryRowH/2);
   }
   noClip();
-
+  //Updates and displays the library scrollbar
   if (libraryScrollbar != null){
     libraryScrollbar.update();
     libraryScrollbar.display();
   }
-
+  //Draws the Add Project button
   fill(255);
   noStroke();
   rect(libraryAddX, libraryAddY, libraryAddW, libraryAddH, 15);
@@ -233,7 +236,7 @@ void drawLibrary(){
   text("Add Project", libraryAddX+125, libraryAddY+23);
 
   drawNavbarOnTop();
-
+  //Shows a confirmation popup before deleting a project
   if (showDeleteConfirm){
     drawDeleteConfirmPopup();
   }
@@ -247,7 +250,7 @@ void drawFAQ(){
 void drawCompose(){
   background(bgColor);
 
-  // Title
+  //Title
   fill(textColor);
   textAlign(CENTER);
   textSize(32);
@@ -257,9 +260,12 @@ void drawCompose(){
   }
   text(title, width / 2, 55);
   
+  //Displays the editor mode/status text under the title
   textSize(16);
   fill(170, 130, 230);
   text(editorDisplayText(), width / 2, 82);
+  
+  //Draws the back button with the NoteFlow logo
   noStroke();
   fill(255, 25);
   rect(8, 16, 64, 52, 8);
@@ -278,9 +284,9 @@ void drawCompose(){
   textAlign(LEFT, CENTER);
   textSize(14);
   text("Back", 78, 42);
-
+  
+  //Draws the music sheet, user notes, and toolbar
   drawExistingMeasureStaves();
-
   drawUserPiece();
   drawToolbarLabels();
 
@@ -294,7 +300,8 @@ void drawDemoVisual(){
 
   fill(119, 61, 255);
   rect(-10,-10,1010,80);
-
+  
+  //Draws the NoteFlow logo
   noStroke();
   fill(255);
   rect(20,40,30,20);
@@ -328,7 +335,8 @@ void drawDemoVisual(){
 void naviBarText() {
   textSize(25);
   textAlign(LEFT);
-
+  
+  //Draws each navigation label and highlights it when hovered
   for (int i = 0; i < navLabels.length; i++) {
     if (isNavHovered(i)) {
       noFill();
@@ -369,10 +377,11 @@ void drawExistingMeasureStaves(){
 }
 
 void drawStaffLines(int y, int measureCount) {
-  stroke(staffColor);
-  strokeWeight(2);
-  float endX = notationStartX + measureWidth() * measureCount;
-
+  stroke(staffColor); //Sets Staff line colors
+  strokeWeight(2);    //Sets staff line thickness
+  float endX = notationStartX + measureWidth() * measureCount; //Calculates where staff should end
+  
+  //Draws the 5 horizontal lines of music staff
   for (int i = 0; i < 5; i++) {
     line(marginX,y + i * staffSpacing,endX,y + i * staffSpacing);
   }
@@ -382,6 +391,7 @@ void drawMeasureLines(int y, int numberOfMeasures) {
   stroke(accentPurple);
   strokeWeight(2);
 
+  //Draws the vertical measure lines that divide the staff into measures
   for (int i = 0; i <= numberOfMeasures; i++) {
     float x = notationStartX + i * measureWidth();
 
@@ -392,10 +402,11 @@ void drawMeasureLines(int y, int numberOfMeasures) {
 //Simple treble clef marker for now
 //Also draws the time sig
 void drawClefKeyAndTimeSig(int systemY){
-  if (userPiece == null){
+  if (userPiece == null){ //Stops the function if there is no song loaded
     return;
   }
-
+  
+  //Sets the x-positions for the clef, key signature, and time signature
   float clefX = marginX + 24;
   float keyX = marginX + 58;
   float timeX = notationStartX - 30;
@@ -413,7 +424,7 @@ void drawClefKeyAndTimeSig(int systemY){
 }
 
 void drawKeySignatureAccidentals(int systemY, KeySignature keySig, float x){
-  if (keySig == null || keySig.accidentalCount == 0){
+  if (keySig == null || keySig.accidentalCount == 0){ //Skips drawing if there is no key signature or no accidentals
     return;
   }
 
@@ -428,7 +439,8 @@ void drawKeySignatureAccidentals(int systemY, KeySignature keySig, float x){
   textSize(22);
 
   int count = constrain(keySig.accidentalCount, 0, notes.length);
-
+  
+  //Draws each sharp or flat symbol on the correct staff line/space
   for (int i=0;i<count;i++){
     float y = noteY(notes[i], systemY, 64);
     text(symbol, x + i * 12, y);
