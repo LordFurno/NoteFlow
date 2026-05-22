@@ -374,10 +374,10 @@ void redoAction(){
   historyIndex++;
   loadHistoryState(historyStates.get(historyIndex));
 }
-
+//Loads an undo/redo snapshopt and ressets anything connected to old piece
 void loadHistoryState(String path){
   if (userPiece != null){
-    userPiece.stopPlayback();
+    userPiece.stopPlayback(); //Stops old piece first so playback doesn't keep going after undo/redo
   }
 
   loadingHistoryState = true;

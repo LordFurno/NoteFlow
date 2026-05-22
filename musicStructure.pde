@@ -1,5 +1,6 @@
 float MUSIC_EPSILON = 0.001;
 
+//Parent clas for anything that can go inside a measure
 class MusicEvent{
   float duration; //0.25 is sixteenth, 0.5 is eigth, 1.0 is quarter, 2.0 is half, 4.0 is whole
   //Given that the bpm is x, we have x/60 beats per second. 
@@ -38,6 +39,7 @@ class Rest extends MusicEvent{
   }
 }
 
+//A measure holds all the notes/rests for one track at one spot in the song
 class Measure{
   int track, id, bpm; //What track this belongs to, the id is the index within the track
   TimeSignature timeSig;
@@ -80,6 +82,7 @@ class Measure{
     return total;
   }
   
+  //Main editing method. It replaces events while keeping the measure length right
   boolean changeEvent(MusicEvent e, int i){
     //This method updates the events list, subdividing or eating rests as needed
     MusicEvent oldEvent = this.events.get(i);
@@ -104,6 +107,7 @@ class Measure{
    
     }else{
       //If the new event is longer, eat the rests after it until it fits
+      //Can only grow through rests and not other notes
       float needed = e.duration - oldEvent.duration;
       int j = i+1;
       while (needed > MUSIC_EPSILON && j < this.events.size()){
@@ -231,8 +235,9 @@ class MusicalPiece{
 }
   
   //trackID is the index of which track in the piece
-//measureID is the index of the measure within a specific track
-//eventID is the specific note within the measure that is being placed/edited
+  //measureID is the index of the measure within a specific track
+  //eventID is the specific note within the measure that is being placed/edited
+  //Used for placing something at a beat position even if that beat is inside a rest
   boolean placeEvent(int trackID, int measureID, int eventID, MusicEvent event){
   Measure measure = getMeasure(trackID, measureID);
     MusicEvent oldEvent = measure.events.get(eventID);
@@ -300,6 +305,7 @@ class MusicalPiece{
   }
   
   //Need to do threads for playing as to not interrupt the drawing and other issues
+  //Playback run in its own thread
   void play(){
     if (playing){
       return;
@@ -310,14 +316,14 @@ class MusicalPiece{
       public void run() {
         //1 quarter note is 1000ms at 60bpm
         float quarterMs = 60000.0 / tempo; //Converts to milliseconds
-
+        //Go through th piece one measure at a time
         for (int m=0; m<measureCount() && playing; m++){ //Goes through each measure
           float currentBeat = 0;
           float measureDuration = timeSig.measureDuration();
 
           while (currentBeat < measureDuration - MUSIC_EPSILON && playing){
             float nextBeat = measureDuration;
-
+            //Check every track at this beat
             for (int t=0;t<tracks.size();t++){ //Goesthrough each track
               if (m >= tracks.get(t).size()){
                 continue;
@@ -364,7 +370,7 @@ class MusicalPiece{
     stopAllInstruments();
   }
   
-  MusicEvent eventAtBeat(Measure measure, float beat){
+  MusicEvent eventAtBeat(Measure measure, float beat){ //Finds the event at a specifc beat
     float currentBeat = 0;
 
     for (MusicEvent event: measure.events){
@@ -376,7 +382,7 @@ class MusicalPiece{
     
     return null;
   }
-  
+  //Finds the next beat where someting starts so playback can jump there
   float nextEventBeatAfter(Measure measure, float beat){
     float currentBeat = 0;
 
