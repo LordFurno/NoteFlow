@@ -111,16 +111,6 @@ void drawHome(){
 
 
 
-
-/*
--starting page
--FAQ page
--Features page
--Library/saved progress page
--Demo's page
-
-*/
-
 //TAB 2
 void drawDemos(){
   background(0);

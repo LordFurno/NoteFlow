@@ -88,7 +88,7 @@ MusicalPiece createDemo1(PApplet app){
   return demo1;
 }
 
-
+//This builds the demos and the music logic behind each demo
 MusicalPiece createDemo2(PApplet app){
   KeySignature keySig = new KeySignature(true, 1);
   TimeSignature timeSig = new TimeSignature(4,4);

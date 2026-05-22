@@ -1,3 +1,5 @@
+//builds the array lists and variables for handling the storage
+
 ArrayList<String> undoStack = new ArrayList<String>();
 ArrayList<String> redoStack = new ArrayList<String>();
 
@@ -249,6 +251,7 @@ String projectNameFromPath(String path){
   return path.substring(slash + 1, path.length() - 5);
 }
 
+//replaces the current project name and cleans it away
 String cleanProjectName(String projectName){
   String cleaned = projectName.trim();
   String badChars = "\\/:*?\"<>|";
@@ -260,7 +263,7 @@ String cleanProjectName(String projectName){
   return cleaned;
 }
 
-
+//Handles saving what the project currently stores
 void saveCurrentProject(String projectName) {
 
   projectName = cleanProjectName(projectName);
@@ -355,6 +358,7 @@ boolean loadProject(String projectName){
   return true;
 }
 
+//goes to the History Storage text file to pull the most recent action to take away
 void undoAction(){
 
   if (historyIndex <= 0){
@@ -365,6 +369,7 @@ void undoAction(){
   loadHistoryState(historyStates.get(historyIndex));
 }
 
+//goes to the History Storage text file to pull the most recent action to return to the project
 void redoAction(){
 
   if (historyIndex >= historyStates.size()-1){
