@@ -26,6 +26,7 @@ boolean showDeleteConfirm = false;
 String pendingDeleteProject = "";
 
 boolean isNavHovered(int i) {
+  //Checks if the mouse is inside the hover area of a navigation item
   return mouseX >= navX[i] - navPad && mouseX <= navX[i] + navW[i] + navPad && mouseY >= navY - 45 && mouseY <= navY + 45;
 }
 
@@ -39,11 +40,11 @@ void mousePressed() {
     return;
   }
 
-  if (handleDemoCardClick()) {
+  if (handleDemoCardClick()) { //Checks if a demo card was clicked
     return;
   }
 
-  if (currentScreen == libraryPage){
+  if (currentScreen == libraryPage){ //If user is on library page display scroll bar
     libraryScrollbar.startDrag();
 
     if (libraryScrollbar.dragging){
